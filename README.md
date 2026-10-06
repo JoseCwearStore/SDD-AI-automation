@@ -200,3 +200,7 @@ scripts/
 - Un `@agente` escrito por el usuario se salta el permiso `task` del agente primario.
 - Un permiso que no probaste no está verificado: después de instalar, prueba con cada agente
   un caso **permitido** y uno **denegado**.
+
+## Licencia
+
+[MIT](LICENSE): úsalo, modifícalo y compártelo libremente, manteniendo el aviso de copyright.
