@@ -91,7 +91,9 @@ Lo usa el reviewer, después de la revisión de código. Solo detectas: no corri
    (sección "Seguridad") y `security.md` si existe. En modo feature, el mini plan aprobado.
 2. Revisa el diff (`git diff`, `git status`). Para C2, C4 y C6 revisa además todo el
    repositorio de forma ligera (`git ls-files`, búsquedas): un secreto viejo también cuenta.
-3. Si la sección "Comandos" de `AGENTS.md` define "Verificación de seguridad", ejecútala.
+3. Si la sección "Comandos" de `AGENTS.md` define "Verificación de seguridad" con un comando
+   (no "No aplica…"), ejecútala. Si dice "No aplica hasta la spec NNN", no la ejecutes:
+   los controles que cubriría (ej. C3) quedan como MANUAL en esta auditoría.
 4. Para cada control, uno de estos resultados:
    - **CUMPLE**: con la evidencia (test, comando o `archivo:línea`).
    - **NO CUMPLE**: es un hallazgo.

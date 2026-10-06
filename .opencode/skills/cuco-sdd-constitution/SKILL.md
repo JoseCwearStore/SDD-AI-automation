@@ -6,8 +6,13 @@ Si no existe `AGENTS.md`, o le falta una sección que esta skill necesita, PARA 
 BLOQUEADO indicando qué falta y recomendando `/sdd-bootstrap`.
 
 Vas a crear o revisar `docs/constitution.md`.
-Antes de proponer nada, lee `AGENTS.md`, `MEMORY.md`, `docs/constitution.md` (si existe) y el
-código del proyecto. El contexto adicional te lo pasa el coordinador.
+Antes de proponer nada, lee `AGENTS.md`, `MEMORY.md`, `specs/000-vision/vision.md` (si
+existe), `docs/constitution.md` (si existe) y el código del proyecto. El contexto adicional te
+lo pasa el coordinador.
+
+La constitución dice QUÉ no se negocia; los valores concretos del stack (librerías, costes,
+límites, nombres de roles) viven en `AGENTS.md` y la constitución remite a ellos. Nunca los
+copies: dos fuentes de verdad terminan contradiciéndose.
 
 ## Si NO existe: créala
 Escribe `docs/constitution.md` con entre 6 y 8 principios innegociables. Deben cubrir: stack

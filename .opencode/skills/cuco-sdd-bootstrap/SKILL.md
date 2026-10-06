@@ -136,7 +136,9 @@ No generes visión ni roadmap salvo que el usuario lo pida.
 
     ## Stack *
     ## Comandos *
-    Con estas etiquetas exactas (las buscan las skills). Si una no aplica: "No aplica".
+    Con estas etiquetas exactas (las buscan las skills). Si una no aplica: "No aplica". Si
+    el comando nacerá en una spec futura: "No aplica hasta la spec NNN (entonces: …)"; nunca
+    lo escribas como si ya existiera, porque las skills lo ejecutan.
     - Levantar el entorno:
     - Tests (todos):
     - Tests unitarios:
@@ -179,7 +181,7 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     Idioma y registro de la interfaz, idioma del código, commits convencionales.
     ## Requisitos del modelo
     El flujo SDD usa subagentes: el modelo elegido debe soportarlos. Usar siempre el agente
-    `coordinator`, nunca Build, para `/sdd`, `/sdd-feature` y `/sdd-change`.
+    `coordinator`, nunca Build, para `/sdd`, `/sdd-continue`, `/sdd-feature` y `/sdd-change`.
     ## Skills
     El flujo SDD usa SOLO las skills locales `.opencode/skills/cuco-sdd-*/`. Las skills
     globales `sdd-*` son otro flujo y no se usan. Las de terceros (`.agents/skills/`) solo se
