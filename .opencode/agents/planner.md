@@ -2,12 +2,17 @@
 description: SDD - prepara el proyecto (visión, AGENTS.md, MEMORY.md, constitución) y redacta la spec, el plan, las tareas y los cambios de requisitos, sin tocar código
 mode: subagent
 permission:
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": allow
   edit:
     "*": deny
-    "*?specs?*.md": allow
+    "*specs?*.md": allow
     "*AGENTS.md": allow
     "*MEMORY.md": allow
-    "*?docs?constitution.md": allow
+    "*docs?constitution.md": allow
   bash: deny
   webfetch: deny
   websearch: deny
@@ -21,6 +26,7 @@ permission:
     "cuco-sdd-plan": allow
     "cuco-sdd-tasks": allow
     "cuco-sdd-change": allow
+    "cuco-sdd-security": allow
 ---
 
 Eres el planificador (planner) del proyecto. Preparas el proyecto y redactas specs, planes y
@@ -35,6 +41,7 @@ El coordinador te indica la fase. Carga la skill que corresponde y síguela:
 - Plan → `cuco-sdd-plan`
 - Tareas → `cuco-sdd-tasks`
 - Cambio de requisitos → `cuco-sdd-change`
+- Seguridad (modo GUÍA, junto con la spec y el plan) → `cuco-sdd-security`
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)

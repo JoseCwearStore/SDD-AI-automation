@@ -9,6 +9,9 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
   solo si se lo pides (MVC, capas…).
 - Decide el camino: **SDD completo** para funcionalidades nuevas, o el flujo liviano
   `/sdd-feature` para cambios pequeños.
+- **Seguridad integrada**: 10 controles (rate limiting, secretos, RLS, validación, auth,
+  errores, logs…) que se previenen desde la spec y se auditan como **última fase**. Si algo
+  falla, vuelve al agente responsable para corregirlo.
 - **Portable**: no depende del stack (Node, Python, Go, Java, .NET…) ni de servicios externos.
 - **Transparente**: anuncia quién hace qué y te pregunta si revisaste lo generado antes de
   aprobar nada.
@@ -23,19 +26,39 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
 - Un modelo que soporte **subagentes**. Los modelos gratuitos de OpenCode fallan al invocarlos:
   usa un proveedor propio con API key.
 - `git` en el proyecto (el reviewer revisa el diff).
-- Node.js, solo si vas a usar el script para renombrar el prefijo.
+- Node.js, para los scripts de instalación y de renombrado.
 
 ## Instalación
 
-1. Copia en la **raíz de tu proyecto** la carpeta `.opencode/` y el archivo `opencode.json`.
-   Si ya tienes un `opencode.json`, añade solo esta línea:
-   ```json
-   "default_agent": "coordinator"
-   ```
-2. (Recomendado) [Renombra el prefijo](#personalizar-el-prefijo-de-las-skills) al de tu proyecto.
-3. Reinicia OpenCode y comprueba que aparecen los agentes al escribir `@`
+Clona este repositorio en cualquier carpeta y, desde ella, instala el kit en tu proyecto:
+
+```bash
+node scripts/install.mjs ../mi-proyecto --prefix gym
+```
+
+- `--prefix gym` deja las skills como `gym-sdd-*` ([por qué](#personalizar-el-prefijo-de-las-skills)).
+  Si no lo indicas, se usa el del kit (`cuco`).
+- `--dry-run` muestra qué haría sin escribir nada.
+- Copia `.opencode/agents`, `.opencode/commands` y `.opencode/skills`, y crea o completa
+  `opencode.json` con `"default_agent": "coordinator"`.
+- **Nunca toca** `AGENTS.md`, `MEMORY.md`, `docs/` ni `specs/`: son de tu proyecto.
+- No borra nada: si tienes skills propias con tu prefijo, se conservan.
+
+Después:
+1. Reinicia OpenCode y comprueba que aparecen los agentes al escribir `@`
    (`coordinator`, `planner`, `tester`, `implementer`, `reviewer`).
-4. Ejecuta `/sdd-bootstrap <tu idea>`.
+2. Ejecuta `/sdd-bootstrap <tu idea>`.
+
+### Actualizar el kit en un proyecto
+
+Haz `git pull` en el kit y vuelve a ejecutar el mismo comando, sin `--prefix`: detecta el
+prefijo que ya usa tu proyecto y solo reescribe los archivos que cambiaron. Con el kit
+como única fuente de verdad, todos tus proyectos se actualizan igual.
+
+### Sin Node
+
+Copia a mano la carpeta `.opencode/` y `opencode.json` en la raíz de tu proyecto (si ya
+tienes un `opencode.json`, añade solo `"default_agent": "coordinator"`).
 
 ## Personalizar el prefijo de las skills
 
@@ -56,19 +79,20 @@ proyecto. Por ejemplo, en un proyecto de gimnasio:
 
 ### Con el script (recomendado)
 
-Desde la raíz del proyecto:
+En un proyecto nuevo, lo más simple es el `--prefix` de la instalación. Para renombrar uno
+ya instalado, desde la raíz de ese proyecto:
 
 ```bash
-node scripts/rename-prefix.mjs gym
+node <ruta-del-kit>/scripts/rename-prefix.mjs gym
 ```
 
 Si ya lo habías renombrado antes, indica el prefijo actual como segundo argumento:
 
 ```bash
-node scripts/rename-prefix.mjs shop gym
+node <ruta-del-kit>/scripts/rename-prefix.mjs shop gym
 ```
 
-El script renombra las 12 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
+El script renombra las 13 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
 archivos de `.opencode/` y en `AGENTS.md`. Después, **reinicia OpenCode**.
 
 ### A mano
@@ -92,8 +116,9 @@ skills y devuelven BLOQUEADO. Tienes que cambiar:
 | Comando | Para qué |
 |---------|----------|
 | `/sdd-bootstrap <idea>` | Prepara el proyecto: entrevista, visión, roadmap, `AGENTS.md`, `MEMORY.md` y constitución. |
-| `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
-| `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión. |
+| `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión → seguridad. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
+| `/sdd-continue <NNN> [indicaciones]` | Retoma una spec existente desde la fase en que quedó (la detecta solo). Nunca crea una spec nueva. |
+| `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión → seguridad. |
 | `/sdd-change <NNN-spec> <cambio>` | Cambia los requisitos de una spec existente, con análisis de impacto. |
 | `/sdd-constitution [contexto]` | Crea (si no existe) o revisa `docs/constitution.md`. |
 | `/sdd-status [NNN-spec]` | En qué fase está cada spec y cuál es el siguiente paso exacto. |
@@ -105,7 +130,8 @@ Un cambio es **pequeño** solo si cumple TODO:
 - no cambia reglas de dominio,
 - no toca el esquema de datos ni las migraciones,
 - no añade dependencias,
-- no añade ni cambia contratos del borde (API, CLI, eventos).
+- no añade ni cambia contratos del borde (API, CLI, eventos),
+- no toca autenticación, autorización, secretos ni datos sensibles.
 
 Si cumple todo → `/sdd-feature`. Si falla uno solo → `/sdd`. Aunque lances `/sdd`, el
 coordinador hace esta triage primero y te recomienda el camino.
@@ -138,9 +164,39 @@ brownfield describe lo que HAY, sin inventar.
 | 5. Implementación | implementer | UNA tarea por delegación, con TDD |
 | 6. Revisión de código | reviewer | `review.md`: RF por RF, constitución, arquitectura y alcance |
 | 7. Correcciones | responsable de cada hallazgo | máximo 2 vueltas |
-| 8. Cierre | implementer + coordinator | `MEMORY.md` actualizado, 🔎 del diff y mensaje de commit propuesto |
+| 8. 🔒 Seguridad | reviewer | `security.md`: controles C1–C10. Si falla, cada hallazgo vuelve a su responsable (máx. 2 vueltas) |
+| 9. Cierre | implementer + coordinator | `MEMORY.md` actualizado, 🔎 del diff y mensaje de commit propuesto |
 
 El commit lo haces **tú**.
+
+### 3. Seguridad
+
+La skill `cuco-sdd-security` define 10 controles y trabaja en dos modos:
+
+| # | Control | Qué exige |
+|---|---------|-----------|
+| C1 | Rate limiting | Límite en endpoints públicos y de auth; 429 al superarlo |
+| C2 | Secretos solo en el servidor | Nada de secretos en el cliente ni en variables expuestas al bundle (`VITE_*`, `NEXT_PUBLIC_*`…) |
+| C3 | RLS en todas las tablas | Si es PostgreSQL/Supabase: ENABLE + **FORCE** RLS y políticas en cada migración |
+| C4 | `.env` fuera de git | `.env*` ignorado (salvo `.env.example` con valores ficticios), sin secretos en el diff |
+| C5 | Validación de entradas | Esquema en el borde, 400 sin eco del dato, consultas parametrizadas, nada de HTML sin escapar |
+| C6 | Ninguna tabla pública | Rol de mínimo privilegio, sin `GRANT` a `PUBLIC`, base no expuesta a internet |
+| C7 | Auth en rutas protegidas | Denegar por defecto; 401 / 403; nada de acceso a recursos ajenos cambiando el id |
+| C8 | Errores sin stack traces | Manejador único; al cliente, mensaje genérico e id de correlación |
+| C9 | Debug/admin bloqueados | Sin rutas de debug en producción; admin con rol explícito |
+| C10 | Logging de seguridad | Logins, 401/403/429 y acciones admin registrados, sin secretos ni datos personales |
+
+- **Modo GUÍA (prevenir)**: la spec declara quién puede hacer qué (con RF de rechazo
+  testeables), el plan recorre C1–C10 y lista las rutas públicas, el tester escribe los
+  tests 401/403/429 y el implementer codifica siguiendo esa sección.
+- **Modo AUDITORÍA (última fase)**: el reviewer comprueba cada control (CUMPLE / NO CUMPLE
+  / NO APLICA / MANUAL) y escribe `security.md`. Si algo no cumple, el coordinador manda
+  cada hallazgo a su responsable y vuelve a auditar. Lo que no se puede comprobar
+  automáticamente (ej. el historial completo de git o la configuración de producción) te lo
+  lista con los pasos exactos.
+
+Lo concreto de tu stack (qué limitador, qué logger, qué límites) va en la sección
+**"Seguridad"** de `AGENTS.md`, que genera el bootstrap.
 
 ### Transparencia
 
@@ -158,9 +214,10 @@ Durante todo el flujo, el coordinador:
 | `planner` | Visión, specs, plan, tareas y archivos de gobierno | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md` |
 | `tester` | Tests de aceptación | Solo carpetas `acceptance/` |
 | `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
-| `reviewer` | Revisa la spec y el código | Solo `specs/**/review.md` |
+| `reviewer` | Revisa la spec, el código y la seguridad | Solo `specs/**/review.md` y `specs/**/security.md` |
 
-Ningún agente puede hacer `git commit`, `git push` ni borrados recursivos. Los comandos de
+Ningún agente puede **leer** los `.env` (salvo `.env.example`), así un secreto nunca termina
+en el chat. Ningún agente puede hacer `git commit`, `git push` ni borrados recursivos. Los comandos de
 tests, tipos y lint de los stacks más comunes están permitidos; el resto pide confirmación.
 
 ## Convenciones del kit
@@ -170,7 +227,8 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
   uno mismo`). El prefijo de spec evita choques entre specs.
 - **Constitución**: cada principio se verifica con `Verificar [auto]` (lo comprueba el
   reviewer) y/o `Verificar [manual]` (te lo lista a ti: el reviewer nunca lo da por hecho).
-- **Specs**: `specs/NNN-nombre/` con `spec.md`, `plan.md`, `tasks.md` y `review.md`.
+- **Specs**: `specs/NNN-nombre/` con `spec.md`, `plan.md`, `tasks.md`, `review.md` y
+  `security.md`.
 - **Skills = CÓMO · AGENTS.md y constitución = QUÉ · agentes = QUIÉN.** Las skills no nombran
   módulos ni comandos concretos: los leen de `AGENTS.md`.
 
@@ -179,11 +237,12 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
 ```
 .opencode/
 ├── agents/      coordinator, planner, tester, implementer, reviewer
-├── commands/    sdd, sdd-feature, sdd-change, sdd-bootstrap, sdd-constitution, sdd-status
-└── skills/      cuco-sdd-<fase>/SKILL.md (12 skills, una por fase)
+├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-bootstrap, sdd-constitution, sdd-status
+└── skills/      cuco-sdd-<fase>/SKILL.md (13 skills: una por fase + seguridad)
 opencode.json    default_agent: coordinator
 scripts/
-└── rename-prefix.mjs
+├── install.mjs        instala o actualiza el kit en un proyecto
+└── rename-prefix.mjs  cambia el prefijo de las skills
 ```
 
 ## Problemas conocidos de OpenCode (aprendidos a la mala)
@@ -192,7 +251,10 @@ scripts/
 - En los permisos gana la **última** regla que coincide: lo general primero, lo específico al
   final.
 - Patrones de `edit` en Windows: empieza con `*` y usa `?` como separador de carpetas
-  (`"*?specs?*.md"`). `"specs/**"` no coincide.
+  (`"*specs?*.md"`). `"specs/**"` no coincide.
+- **Nunca pongas `?` justo después del `*` inicial** (`"*?specs?*"`): exige un carácter
+  antes de la carpeta y falla cuando OpenCode compara la ruta relativa (`specs\…`). Un
+  `allow` así bloquea a un agente, y un `deny` así deja la puerta abierta.
 - Un YAML inválido en el frontmatter de un agente hace que OpenCode lo **descarte en
   silencio**. Si un agente no aparece con `@`, revisa su YAML.
 - Si un subagente falla y estás en el agente Build, Build hace el trabajo él mismo **sin

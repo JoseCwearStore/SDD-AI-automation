@@ -41,6 +41,12 @@ Plantilla:
     ## Casos límite
     Los que pueden romper las reglas de dominio de `AGENTS.md`.
 
+    ## Acceso y seguridad
+    Según `cuco-sdd-security` (modo GUÍA): quién puede hacer cada acción, qué es público,
+    qué entradas llegan de fuera y con qué límites. Las reglas de acceso son RF con su
+    criterio (ej. "SI un usuario no autenticado …, ENTONCES el sistema DEBE rechazarlo").
+    Si el cambio no expone nada nuevo: "Sin cambios de acceso" y por qué.
+
     ## Fuera de alcance
     Lo que explícitamente NO se hace en esta versión.
 

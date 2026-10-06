@@ -20,6 +20,9 @@ reescribas la spec.
 5. **Forma** (plantilla de `cuco-sdd-spec`): "Estado: borrador", RF en EARS, un comportamiento
    por RF, sección "Fuera de alcance", y nada de stack, capas, endpoints ni archivos (salvo
    que el Contexto la declare "Spec de infraestructura").
+6. **Acceso y seguridad**: la sección existe; cada acción nueva dice quién puede hacerla;
+   lo que no dice "público" es privado y tiene su RF de rechazo (no autenticado, sin
+   permiso, recurso ajeno); las entradas externas tienen límites concretos.
 
 ## Cómo clasificar cada hallazgo
 - **Corrige el planner**: problemas de forma o de redacción que se arreglan sin saber qué
@@ -34,6 +37,6 @@ Primera línea: `VEREDICTO: SPEC LISTA` o `VEREDICTO: SPEC CON PROBLEMAS`.
 
 Hallazgos numerados, cada uno con:
 - Ubicación (RF, criterio o sección)
-- Categoría (ambigüedad | contradicción | caso límite | testabilidad | forma)
+- Categoría (ambigüedad | contradicción | caso límite | testabilidad | forma | seguridad)
 - Qué falla y por qué
 - **Resuelve**: planner | usuario (con la pregunta)

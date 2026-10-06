@@ -15,12 +15,15 @@ EJECUTAR) te los pasa el coordinador.
    - no cambia reglas de dominio de `AGENTS.md`,
    - no toca el esquema de datos ni las migraciones,
    - no añade dependencias,
-   - no añade ni cambia contratos del borde (API, CLI, eventos).
+   - no añade ni cambia contratos del borde (API, CLI, eventos),
+   - no toca autenticación, autorización, secretos ni datos sensibles.
    Si falla alguno: devuelve BLOQUEADO indicando cuál, y recomienda `/sdd`.
 2. Mini plan en tu respuesta:
    - Qué cambia y en qué capa (según la sección "Arquitectura" de `AGENTS.md`).
    - Archivos que vas a crear o modificar, y qué cambia en cada uno.
    - Tests que vas a escribir (qué comportamiento prueba cada uno).
+   - Seguridad: qué controles de `cuco-sdd-security` (C1–C10) toca el cambio y cómo los
+     cumple (normalmente C5 validación y C8 errores). La auditoría final lo comprobará.
    - Casos límite y dudas que debe decidir el usuario.
    - Si hace falta cambiar `AGENTS.md`: proponlo, no lo hagas (probablemente no era pequeño).
 

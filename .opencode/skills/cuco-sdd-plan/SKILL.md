@@ -56,6 +56,15 @@ criterios de la spec cubre cada uno.
 |----|-------------------|--------------|
 Todos los RF de la spec deben aparecer. Un RF sin fila es un plan incompleto.
 
+## 9. Seguridad
+Con `cuco-sdd-security` en modo GUÍA y la sección "Seguridad" de `AGENTS.md`:
+- **Rutas públicas**: la lista explícita. Todo lo que no esté aquí exige autenticación.
+- **C1–C10**: una línea por control: "Aplica: cómo (componente y archivo)" o "No aplica:
+  por qué". Tablas nuevas → C3 con ENABLE + FORCE + políticas en su migración.
+- Librerías nuevas que hagan falta (limitador, logger, validación) → también en
+  "⚠️ Requiere aprobación".
+La auditoría final de seguridad comprueba el código contra esta sección.
+
 ## Reglas
 - Todo respeta la dirección de dependencias de la sección "Arquitectura" de `AGENTS.md`.
 - No añadas nada que la spec no pida: si algo parece necesario y no está en la spec,

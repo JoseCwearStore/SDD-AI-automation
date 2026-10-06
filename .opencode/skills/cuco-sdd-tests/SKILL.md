@@ -25,6 +25,9 @@ Usa la tabla de trazabilidad y la estrategia de tests de `plan.md`:
   la estrategia de `plan.md` y la sección "Tests" de `AGENTS.md`.
 Ubicación: la que define la sección "Tests" de `AGENTS.md`, siempre dentro de una carpeta
 `acceptance/` (fuera de ella no tienes permiso de escritura).
+- Los RF de la sección "Acceso y seguridad" de la spec también llevan su test, en el borde
+  del sistema: 401 sin sesión, 403 sin permiso, recurso ajeno, 429 al superar el límite,
+  400 con entrada inválida, y que un error no devuelve stack ni detalles internos.
 
 ## 3. Reglas
 - Importa SOLO nombres y rutas que define `plan.md` (casos de uso, puertos, fakes, endpoints).

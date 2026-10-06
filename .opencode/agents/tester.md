@@ -4,9 +4,14 @@ mode: subagent
 # Permisos genéricos: los tests de aceptación viven SIEMPRE en carpetas llamadas
 # `acceptance/` (convención del SDD, la fija la sección "Tests" de AGENTS.md).
 permission:
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": allow
   edit:
     "*": deny
-    "*?acceptance?*": allow
+    "*acceptance?*": allow
   bash:
     "*": ask
     "git status*": allow

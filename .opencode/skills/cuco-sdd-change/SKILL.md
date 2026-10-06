@@ -28,7 +28,9 @@ Si el cambio es ambiguo: devuelve PREGUNTAS (máximo 5).
 - **tasks.md**: tareas nuevas necesarias. Las ya marcadas NO se desmarcan: los ajustes van
   en tareas nuevas.
 - **Tests de aceptación**: cuáles hay que modificar o crear (por nombre `NNN-RFn:`).
-- **review.md**: si existe, queda invalidado.
+- **review.md** y **security.md**: si existen, quedan invalidados.
+- **Acceso y seguridad**: si el cambio añade acciones, rutas o entradas, actualiza esa
+  sección de la spec con sus RF de acceso.
 
 ## 3. Respuesta
 Devuelve el diff de la spec como "Antes / Después" por cada RF tocado, más el análisis de

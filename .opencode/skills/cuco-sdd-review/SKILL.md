@@ -5,6 +5,10 @@ description: SDD · Valida la implementación de una spec RF por RF (o un cambio
 Si no existe `AGENTS.md`, o le falta una sección que esta skill necesita, PARA y devuelve
 BLOQUEADO indicando qué falta y recomendando `/sdd-bootstrap`.
 
+La seguridad (controles C1–C10) la audita después, como última fase, `cuco-sdd-security`:
+aquí no la repitas. Si ves un problema de seguridad evidente, anótalo como "Opcional" con
+una referencia al control.
+
 ## Constitución: checks automáticos y manuales (vale en los dos modos)
 - Ejecuta cada `Verificar [auto]:` de `docs/constitution.md`. Un principio que no se cumple
   es un hallazgo.

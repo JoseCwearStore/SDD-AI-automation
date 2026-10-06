@@ -10,6 +10,8 @@ La spec y la tarea (ej. `specs/NNN-nombre/`, `T3`) te las pasa el coordinador.
 ## 0. Antes de empezar
 - Lee `docs/constitution.md`, `AGENTS.md`, `MEMORY.md`, y de la spec: `spec.md`, `plan.md`,
   `tasks.md` y los tests de aceptación de los RF de tu tarea.
+- Carga `cuco-sdd-security` en modo GUÍA y aplica la sección "Seguridad" de `plan.md` a lo
+  que toca tu tarea (validación en el borde, auth, errores, logs, secretos).
 - Comprueba que las tareas anteriores están marcadas como hechas. Si no: PARA y devuelve
   BLOQUEADO.
 

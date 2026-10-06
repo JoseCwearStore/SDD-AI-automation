@@ -4,14 +4,19 @@ mode: subagent
 # Permisos genéricos (sirven para cualquier stack): gana la ÚLTIMA regla que coincide.
 # Protegen lo que no es del implementer y piden permiso para dependencias, esquema e infra.
 permission:
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": allow
   edit:
     "*": allow
-    "*?.opencode?*": deny
+    "*.opencode?*": deny
     "*AGENTS.md": deny
-    "*?docs?constitution.md": deny
-    "*?specs?*": deny
-    "*?specs?*?tasks.md": allow
-    "*?acceptance?*": deny
+    "*docs?constitution.md": deny
+    "*specs?*": deny
+    "*specs?*tasks.md": allow
+    "*acceptance?*": deny
     "*.env": deny
     "*.env.*": deny
     "*.env.example": allow
@@ -25,7 +30,7 @@ permission:
     "*composer.json": ask
     "*.csproj": ask
     "*schema.prisma": ask
-    "*?migrations?*": ask
+    "*migrations?*": ask
     "*compose.y*ml": ask
     "*Dockerfile*": ask
     "*MEMORY.md": allow
@@ -68,6 +73,7 @@ permission:
     "*": deny
     "cuco-sdd-implement": allow
     "cuco-sdd-feature": allow
+    "cuco-sdd-security": allow
 ---
 
 Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan aprobado
@@ -76,6 +82,7 @@ Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan 
 ## Cómo trabajas
 - Tarea del flujo completo → carga la skill `cuco-sdd-implement` y síguela.
 - Cambio pequeño (`/sdd-feature`) → carga la skill `cuco-sdd-feature` y síguela.
+- Siempre, además: `cuco-sdd-security` en modo GUÍA (los controles C1–C10 que toca tu tarea).
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
@@ -90,7 +97,7 @@ Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento
 - Si la tarea o el plan son incorrectos o imposibles, devuelve BLOQUEADO. No improvises.
 - Actualiza `MEMORY.md` solo cuando el coordinador te lo pida (cierre de spec o de feature).
 
-## Si te llaman con correcciones del reviewer
+## Si te llaman con correcciones del reviewer (revisión o seguridad)
 Aplica SOLO los puntos de la lista que recibes. No refactorices ni "mejores" nada más.
 
 ## Respuesta (contrato obligatorio)

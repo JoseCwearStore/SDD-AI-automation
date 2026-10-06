@@ -54,6 +54,12 @@ Identifica también:
 ### Etapa 3: Requisitos no funcionales
 Solo los que importan para esta idea: privacidad y normativa, volumen esperado de usuarios y
 datos, disponibilidad, rendimiento, accesibilidad e idiomas.
+Seguridad (siempre, aunque el usuario no la mencione):
+- ¿Estará expuesto a internet? ¿Quién puede usarlo sin cuenta?
+- ¿Hay roles con más poder (admin, moderador)? ¿Qué pueden hacer que otros no?
+- ¿Qué datos sensibles maneja y quién puede verlos?
+- ¿Qué servicios externos usan claves o secretos?
+- ¿Qué eventos de seguridad quiere poder revisar (logins fallidos, abusos, acciones admin)?
 
 ### Etapa 4: Técnica
 **Arquitectura por defecto: hexagonal (puertos y adaptadores) en backend Y frontend,
@@ -69,6 +75,9 @@ señala sus riesgos.
 - Organización de carpetas (monorepo o no) siguiendo la arquitectura elegida.
 - Persistencia: tipo de base de datos y herramienta de acceso.
 - Autenticación y autorización, si hay usuarios.
+- Seguridad del borde: limitador de peticiones, validación de entradas, logger y, si la
+  base es PostgreSQL o Supabase, la estrategia de RLS (los 10 controles de
+  `cuco-sdd-security`). Para las librerías, propón opciones como en el resto.
 - Entorno y despliegue: cómo se levanta en local y dónde correrá.
 - Estrategia de tests y verificaciones automáticas (tests, arquitectura, tipos). Incluye
   una herramienta que verifique la dirección de dependencias de la arquitectura.
@@ -133,6 +142,7 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Tests unitarios:
     - Verificación de arquitectura:
     - Verificación de tipos:
+    - Verificación de seguridad:
     ## Antes de tocar código
     Leer `docs/constitution.md`, la spec activa (`specs/NNN-*/`) y `MEMORY.md`.
     ## Arquitectura *
@@ -151,6 +161,20 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Unitarios y de integración: dónde viven y cómo se distinguen (ej. sufijos de archivo).
       Los escribe el implementer.
     - Fakes compartidos (adaptadores en memoria, reloj falso): los escribe el implementer.
+    ## Seguridad *
+    Lo concreto de este stack para los controles C1–C10 de `cuco-sdd-security`. Si uno no
+    aplica, "No aplica" y por qué.
+    - Exposición: público en internet o no; qué se puede usar sin cuenta.
+    - Rate limiting (C1): herramienta y límites (ej. login: N intentos por IP y minuto).
+    - Secretos (C2, C4): dónde viven, cómo se leen, qué prefijo de variable llega al
+      navegador (y por tanto nunca lleva secretos).
+    - Base de datos (C3, C6): motor; si es PostgreSQL/Supabase, RLS con ENABLE + FORCE y
+      políticas; rol de la app con mínimo privilegio; puerto no expuesto.
+    - Entradas (C5): dónde y con qué se validan.
+    - Auth (C7): mecanismo, dónde vive el middleware, roles y dónde viven las políticas.
+    - Errores (C8): el manejador único y qué devuelve.
+    - Debug/admin (C9): qué rutas existen y cómo se protegen o desactivan en producción.
+    - Logs (C10): puerto y adaptador del logger, eventos registrados, campos prohibidos.
     ## Convenciones
     Idioma y registro de la interfaz, idioma del código, commits convencionales.
     ## Requisitos del modelo
