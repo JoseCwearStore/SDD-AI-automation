@@ -36,7 +36,90 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
 
 ## Instalación
 
-Clona este repositorio en cualquier carpeta y, desde ella, instala el kit en tu proyecto:
+Los comandos del kit (`git`, `node scripts/…`) son iguales en Windows, macOS y Linux. Lo que
+cambia por sistema es cómo instalar los requisitos.
+
+### 1. Requisitos según tu sistema
+
+Recomendamos **fnm** para Node.js: cada proyecto puede exigir su propia versión (en su
+`.nvmrc`) y fnm cambia de versión solo al entrar en la carpeta, sin afectar a tus otros
+proyectos.
+
+**Windows** (PowerShell):
+
+```powershell
+winget install --id Git.Git -e
+winget install Schniz.fnm
+```
+
+Agrega esta línea a tu perfil de PowerShell (`notepad $PROFILE`), abre una terminal nueva e
+instala Node y OpenCode:
+
+```powershell
+fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
+```
+
+```powershell
+fnm install --lts
+npm install -g opencode-ai
+```
+
+> OpenCode recomienda **WSL** en Windows para la mejor compatibilidad. El kit también
+> funciona en Windows nativo (así se probó). En PowerShell 5, `&&` no existe: escribe un
+> comando por línea.
+
+**macOS** (con [Homebrew](https://brew.sh)):
+
+```bash
+xcode-select --install
+brew install fnm
+brew install anomalyco/tap/opencode
+```
+
+Agrega a `~/.zshrc` la línea `eval "$(fnm env --use-on-cd --shell zsh)"`, abre una terminal
+nueva e instala Node:
+
+```bash
+fnm install --lts
+```
+
+**Linux** (Debian/Ubuntu; en Fedora usa `dnf` en lugar de `apt`):
+
+```bash
+sudo apt install git curl unzip
+curl -fsSL https://fnm.vercel.app/install | bash
+curl -fsSL https://opencode.ai/install | bash
+```
+
+Agrega a `~/.bashrc` la línea `eval "$(fnm env --use-on-cd --shell bash)"`, abre una terminal
+nueva e instala Node:
+
+```bash
+fnm install --lts
+```
+
+Comprueba que todo está: `git --version`, `node --version` y `opencode --version`. Otras
+formas de instalar OpenCode (Scoop, Chocolatey, Arch…): [opencode.ai/docs](https://opencode.ai/docs/).
+
+### 2. Descarga el kit
+
+En cualquier carpeta:
+
+```bash
+git clone https://github.com/JoseCwearStore/SDD-AI-automation.git
+```
+
+### 3. Crea tu proyecto (o usa uno existente)
+
+```bash
+mkdir mi-proyecto
+cd mi-proyecto
+git init
+```
+
+### 4. Instala el kit en tu proyecto
+
+Desde la carpeta del kit:
 
 ```bash
 node scripts/install.mjs ../mi-proyecto --prefix gym
@@ -50,10 +133,17 @@ node scripts/install.mjs ../mi-proyecto --prefix gym
 - **Nunca toca** `AGENTS.md`, `MEMORY.md`, `docs/` ni `specs/`: son de tu proyecto.
 - No borra nada: si tienes skills propias con tu prefijo, se conservan.
 
-Después:
-1. Reinicia OpenCode y comprueba que aparecen los agentes al escribir `@`
-   (`coordinator`, `planner`, `tester`, `implementer`, `reviewer`).
-2. Ejecuta `/sdd-bootstrap <tu idea>`.
+### 5. Arranca
+
+Abre OpenCode en la carpeta de tu proyecto (`cd mi-proyecto` y `opencode`), comprueba que
+aparecen los agentes al escribir `@` (`coordinator`, `planner`, `tester`, `implementer`,
+`reviewer`) y empieza con tu idea:
+
+```
+/sdd-bootstrap Una app para … (describe lo que quieres construir)
+```
+
+Si OpenCode ya estaba abierto, reinícialo para que cargue los agentes.
 
 ### Actualizar el kit en un proyecto
 
@@ -65,6 +155,18 @@ como única fuente de verdad, todos tus proyectos se actualizan igual.
 
 Copia a mano la carpeta `.opencode/` y `opencode.json` en la raíz de tu proyecto (si ya
 tienes un `opencode.json`, añade solo `"default_agent": "coordinator"`).
+
+macOS y Linux:
+
+```bash
+cp -r .opencode opencode.json ../mi-proyecto/
+```
+
+Windows (PowerShell):
+
+```powershell
+Copy-Item -Recurse .opencode, opencode.json ..\mi-proyecto\
+```
 
 ## Personalizar el prefijo de las skills
 
@@ -305,8 +407,9 @@ scripts/
 - La clave es `permission` (singular). `permissions` se ignora **en silencio**.
 - En los permisos gana la **última** regla que coincide: lo general primero, lo específico al
   final.
-- Patrones de `edit` en Windows: empieza con `*` y usa `?` como separador de carpetas
-  (`"*specs?*.md"`). `"specs/**"` no coincide.
+- Patrones de `edit`: empieza con `*` y usa `?` como separador de carpetas
+  (`"*specs?*.md"`). Así coinciden en todos los sistemas, porque `?` vale tanto para `/`
+  (macOS, Linux) como para `\` (Windows). En Windows, `"specs/**"` no coincide.
 - **Nunca pongas `?` justo después del `*` inicial** (`"*?specs?*"`): exige un carácter
   antes de la carpeta y falla cuando OpenCode compara la ruta relativa (`specs\…`). Un
   `allow` así bloquea a un agente, y un `deny` así deja la puerta abierta.
