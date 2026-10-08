@@ -313,6 +313,10 @@ scripts/
      deja `external_directory: deny` en los agentes. OpenCode aplica `external_directory` a
      `read`, `grep` y `glob`, así que ese archivo queda realmente fuera de su alcance. Cuesta
      más configuración; para la mayoría de proyectos bastan las capas 1 y 2.
+- **Comandos encadenados (`&&`, `;`, `|`): OpenCode evalúa cada parte por separado**
+  (verificado en una prueba real). Una parte permitida al principio no "contagia" el
+  permiso al resto: `git status && echo x > f` pregunta (la segunda parte cae en `ask`) y
+  `git status && rm -rf algo` se rechaza solo (la segunda parte está en `deny`).
 - Un permiso que no probaste no está verificado: después de instalar, prueba con cada agente
   un caso **permitido** y uno **denegado**.
 
