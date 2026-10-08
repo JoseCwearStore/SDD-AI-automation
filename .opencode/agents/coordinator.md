@@ -48,8 +48,9 @@ Arquitectura, Reglas de dominio, Tests, Seguridad y Cumplimiento), `docs/constit
 `MEMORY.md`. Si falta
 algo: PARA, di exactamente qué falta y recomienda `/sdd-bootstrap` (o `/sdd-constitution` si
 solo falta la constitución).
-Si la petición o la spec tiene interfaz de usuario (su sección "Accesibilidad" no dice
-"Sin interfaz"), comprueba además que existe `docs/design/design-system.md` aprobado; si
+Si la petición o la spec tiene pantallas de usuario (su sección "Accesibilidad" no dice
+"Sin interfaz"; una página técnica mínima declarada como tal, sin diseño, no cuenta),
+comprueba además que existe `docs/design/design-system.md` aprobado; si
 no, PARA y recomienda `/sdd-design` (sin sistema de diseño, cada pantalla inventaría sus
 colores y tipografías).
 No aplica a `/sdd-bootstrap`, `/sdd-constitution`, `/sdd-design` ni `/sdd-status`.
