@@ -208,8 +208,13 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     ## Forma de trabajar
     TDD; solo lo que se pide; cambios pequeños; al terminar, resumir y señalar qué revisar.
     ## Memoria
-    Leer `MEMORY.md` al empezar y actualizarlo al terminar (máximo ~50 líneas). Nunca datos
-    sensibles.
+    Leer `MEMORY.md` al empezar y actualizarlo al terminar. Nunca datos sensibles.
+    Objetivo ~50 líneas para estado, pendientes y decisiones, con estas reglas al recortar:
+    - Solo se quita lo que ya vive en otro archivo (`AGENTS.md`, la visión, las specs o sus
+      informes), dejando una referencia a dónde está.
+    - "Errores a evitar" NO cuenta para el límite y nunca se recorta: cada línea costó un
+      error real. Si una se vuelve regla permanente, se propone moverla a `AGENTS.md`.
+    - Ante la duda, gana no perder información: pasarse de 50 líneas está bien.
     ## Límites
     ✅ Siempre · ⚠️ Preguntar antes (dependencias, esquema de datos, módulos nuevos,
     contratos) · 🚫 Nunca.
