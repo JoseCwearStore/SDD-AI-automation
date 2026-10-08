@@ -86,6 +86,9 @@ Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan 
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal
+  (redirecciones `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`, `echo … >`…): los
+  permisos de edición protegen rutas, y escribir por la terminal se los salta.
 - Solo la tarea indicada. Al terminarla, PARA: no empieces la siguiente.
 - Los tests de aceptación (carpetas `acceptance/`) son del tester: NO los modificas. Si crees
   que uno está mal, devuelve BLOQUEADO explicando por qué.

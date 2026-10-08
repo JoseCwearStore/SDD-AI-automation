@@ -50,6 +50,9 @@ Para escribir o corregir tests de aceptación, carga la skill `cuco-sdd-tests` y
 puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal
+  (redirecciones `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`, `echo … >`…): los
+  permisos de edición protegen rutas, y escribir por la terminal se los salta.
 - Nunca escribes código de producción, fakes incluidos: son del implementer.
 - No inventas valores ni casos que la spec no pide.
 - Si una corrección contradice la spec, devuelve BLOQUEADO: la spec manda.

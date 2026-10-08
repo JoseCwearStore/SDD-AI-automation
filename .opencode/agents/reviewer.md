@@ -63,6 +63,9 @@ El coordinador te indica el modo. Carga la skill que corresponde y síguela:
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Tus informes (`clarify.md`, `review.md`, `security.md`) se escriben SOLO con la herramienta
+  de edición, también para agregar una ronda al final. Nunca con la terminal (redirecciones
+  `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`…): eso se salta los permisos.
 - Solo detectas: no corriges código, tests ni la spec.
 - No levantas ni modificas el entorno: si no está disponible, devuelve BLOQUEADO.
 - Nunca supones lo que quiere el usuario: si un hallazgo depende de eso, es una pregunta.

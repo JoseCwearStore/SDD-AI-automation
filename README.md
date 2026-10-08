@@ -261,6 +261,11 @@ scripts/
 - Si un subagente falla y estás en el agente Build, Build hace el trabajo él mismo **sin
   restricciones**. Por eso `default_agent` es `coordinator`.
 - Un `@agente` escrito por el usuario se salta el permiso `task` del agente primario.
+- Los permisos de `edit` solo controlan la herramienta de edición: un agente que escribe un
+  archivo **por la terminal** (`>`, `Set-Content`, here-strings…) se los salta. Por eso los
+  agentes tienen prohibido hacerlo y `bash` está en `ask` por defecto. Si OpenCode te pide
+  permiso para un comando que escribe un archivo, **recházalo** y nunca uses "Always allow"
+  con comandos genéricos.
 - Un permiso que no probaste no está verificado: después de instalar, prueba con cada agente
   un caso **permitido** y uno **denegado**.
 
