@@ -14,6 +14,8 @@ permission:
     "*.opencode?*": deny
     "*AGENTS.md": deny
     "*docs?constitution.md": deny
+    "*docs?legal?*": deny
+    "*docs?release?*": deny
     "*specs?*": deny
     "*specs?*tasks.md": allow
     "*acceptance?*": deny
@@ -74,6 +76,8 @@ permission:
     "cuco-sdd-implement": allow
     "cuco-sdd-feature": allow
     "cuco-sdd-security": allow
+    "cuco-sdd-privacy": allow
+    "cuco-sdd-a11y": allow
 ---
 
 Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan aprobado
@@ -82,7 +86,8 @@ Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan 
 ## Cómo trabajas
 - Tarea del flujo completo → carga la skill `cuco-sdd-implement` y síguela.
 - Cambio pequeño (`/sdd-feature`) → carga la skill `cuco-sdd-feature` y síguela.
-- Siempre, además: `cuco-sdd-security` en modo GUÍA (los controles C1–C10 que toca tu tarea).
+- Siempre, además, en modo GUÍA: `cuco-sdd-security` (C1–C10), `cuco-sdd-privacy` (P1–P12)
+  y, si la tarea toca interfaz, `cuco-sdd-a11y` (A1–A8).
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)

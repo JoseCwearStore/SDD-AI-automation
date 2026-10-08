@@ -47,6 +47,15 @@ Plantilla:
     criterio (ej. "SI un usuario no autenticado …, ENTONCES el sistema DEBE rechazarlo").
     Si el cambio no expone nada nuevo: "Sin cambios de acceso" y por qué.
 
+    ## Datos personales
+    Según `cuco-sdd-privacy` (modo GUÍA): tabla de los datos personales nuevos o
+    cambiados (dato, finalidad, motivo, conservación, quién lo ve, si sale a terceros).
+    Si no hay: "Sin datos personales nuevos".
+
+    ## Accesibilidad
+    Según `cuco-sdd-a11y` (modo GUÍA): pantallas nuevas o cambiadas y lo que exigen más
+    allá de lo obvio. Si no hay interfaz: "Sin interfaz".
+
     ## Fuera de alcance
     Lo que explícitamente NO se hace en esta versión.
 
@@ -58,3 +67,5 @@ Plantilla:
 - Cada RF es verificable: si no se puede escribir un criterio con valores concretos, el RF
   está mal escrito.
 - Un RF por comportamiento: si un RF tiene un "y", probablemente son dos.
+- No repitas como RF las verificaciones de `docs/constitution.md`: el reviewer las ejecuta
+  en cada revisión de código, en todas las specs. Una spec solo pide lo propio del cambio.

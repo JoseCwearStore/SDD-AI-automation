@@ -39,6 +39,7 @@ permission:
   skill:
     "*": deny
     "cuco-sdd-tests": allow
+    "cuco-sdd-a11y": allow
 ---
 
 Eres el tester del proyecto. Escribes los tests de aceptación a partir de la spec. Nunca
@@ -48,6 +49,8 @@ la sección "Tests" de `AGENTS.md`.
 ## Cómo trabajas
 Para escribir o corregir tests de aceptación, carga la skill `cuco-sdd-tests` y síguela. Si no
 puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
+Si la spec tiene interfaz, carga también `cuco-sdd-a11y` en modo GUÍA: consultas por rol y
+nombre accesible, y tests de teclado.
 
 ## Límites (valen siempre)
 - Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal

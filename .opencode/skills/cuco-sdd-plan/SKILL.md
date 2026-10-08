@@ -50,6 +50,10 @@ Cada una con: qué se decidió, la alternativa descartada y por qué se descart�
 ## 7. Estrategia de tests
 Unitarios, integración y aceptación, según la sección "Tests" de `AGENTS.md`, indicando qué
 criterios de la spec cubre cada uno.
+**Aislamiento**: por cada recurso externo que usen los tests (base de datos, almacenamiento,
+colas, correo), su configuración de test propia, que nunca cae en la de desarrollo, y su
+validación (nombre de test + host permitido de una lista explícita). Si no es válida, los
+tests que la usan FALLAN con un mensaje claro: nunca se saltean.
 
 ## 8. Trazabilidad
 | RF | Capa / componente | Tipo de test |
@@ -64,6 +68,12 @@ Con `cuco-sdd-security` en modo GUÍA y la sección "Seguridad" de `AGENTS.md`:
 - Librerías nuevas que hagan falta (limitador, logger, validación) → también en
   "⚠️ Requiere aprobación".
 La auditoría final de seguridad comprueba el código contra esta sección.
+
+## 10. Cumplimiento
+Con `cuco-sdd-privacy` y `cuco-sdd-a11y` en modo GUÍA y la sección "Cumplimiento" de
+`AGENTS.md`: una línea por cada control que toca la spec (P1–P12, A1–A8): "Aplica: cómo" o
+"No aplica: por qué". Servicios o SDKs nuevos, con los datos que reciben, y herramientas de
+accesibilidad para tests → también en "⚠️ Requiere aprobación".
 
 ## Reglas
 - Todo respeta la dirección de dependencias de la sección "Arquitectura" de `AGENTS.md`.

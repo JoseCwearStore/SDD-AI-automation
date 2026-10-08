@@ -19,7 +19,9 @@ No modifiques ningún archivo. Lee `MEMORY.md` y la carpeta de la spec que te in
    si hay `review.md` con CAMBIOS NECESARIOS, indica cuántos hallazgos quedan).
 7. Existe `security.md` con `VEREDICTO: SEGURO` en su última ronda → si no: fase 8
    (auditoría de seguridad pendiente, o hallazgos por corregir: indica cuántos y de quién).
-8. `MEMORY.md` menciona el cierre de esta spec → si no: fase 9 (cierre pendiente).
+8. Existe `compliance.md` con `VEREDICTO: CUMPLE` en su última ronda → si no: fase 9
+   (auditoría de cumplimiento pendiente, o hallazgos por corregir).
+9. `MEMORY.md` menciona el cierre de esta spec → si no: fase 10 (cierre pendiente).
 Si se cumplen todas: spec cerrada.
 
 ## Respuesta (máximo 8 líneas por spec)

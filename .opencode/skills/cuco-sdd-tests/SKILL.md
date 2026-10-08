@@ -28,6 +28,10 @@ Ubicación: la que define la sección "Tests" de `AGENTS.md`, siempre dentro de 
 - Los RF de la sección "Acceso y seguridad" de la spec también llevan su test, en el borde
   del sistema: 401 sin sesión, 403 sin permiso, recurso ajeno, 429 al superar el límite,
   400 con entrada inválida, y que un error no devuelve stack ni detalles internos.
+- Si hay interfaz (con `cuco-sdd-a11y`): busca elementos por rol y nombre accesible, nunca
+  por clase o id; los criterios de teclado se prueban con eventos de teclado.
+- Los tests que tocan recursos externos usan solo la configuración de test que define el
+  plan ("Aislamiento"); si no es válida, fallan, nunca se saltean.
 
 ## 3. Reglas
 - Importa SOLO nombres y rutas que define `plan.md` (casos de uso, puertos, fakes, endpoints).

@@ -60,6 +60,14 @@ Seguridad (siempre, aunque el usuario no la mencione):
 - ¿Qué datos sensibles maneja y quién puede verlos?
 - ¿Qué servicios externos usan claves o secretos?
 - ¿Qué eventos de seguridad quiere poder revisar (logins fallidos, abusos, acciones admin)?
+Cumplimiento (siempre; decide qué controles de `cuco-sdd-privacy` y `cuco-sdd-a11y` aplican):
+- Jurisdicción(es): dónde opera y dónde están sus usuarios (ej. México: LFPDPPP y derechos
+  ARCO; UE: RGPD). Ante la duda, se aplica la más estricta.
+- ¿Guarda datos personales? ¿Hay pagos? ¿Envía correos? ¿Cookies o analítica no esenciales?
+- ¿Pueden usarlo menores? Edad mínima (decisión del usuario según la ley).
+- ¿Usa imágenes, fuentes o multimedia de terceros?
+- Responsable del producto (persona o empresa y contacto): lo completa el usuario.
+- Nivel de accesibilidad: WCAG 2.2 AA por defecto.
 
 ### Etapa 4: Técnica
 **Arquitectura por defecto: hexagonal (puertos y adaptadores) en backend Y frontend,
@@ -163,6 +171,9 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Unitarios y de integración: dónde viven y cómo se distinguen (ej. sufijos de archivo).
       Los escribe el implementer.
     - Fakes compartidos (adaptadores en memoria, reloj falso): los escribe el implementer.
+    - Aislamiento: por cada recurso externo de los tests (base de datos, almacenamiento,
+      colas, correo), su configuración de test propia, sin caer en la de desarrollo,
+      validada (nombre de test + hosts permitidos) y con fallo explícito si no es válida.
     ## Seguridad *
     Lo concreto de este stack para los controles C1–C10 de `cuco-sdd-security`. Si uno no
     aplica, "No aplica" y por qué.
@@ -177,6 +188,14 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Errores (C8): el manejador único y qué devuelve.
     - Debug/admin (C9): qué rutas existen y cómo se protegen o desactivan en producción.
     - Logs (C10): puerto y adaptador del logger, eventos registrados, campos prohibidos.
+    ## Cumplimiento *
+    Lo concreto de este proyecto para `cuco-sdd-privacy` (P1–P12) y `cuco-sdd-a11y` (A1–A8).
+    - Jurisdicción(es) y la regla aplicada ante la duda.
+    - Qué controles aplican y cuáles no, con el porqué (ej. "P9 No aplica: sin pagos").
+    - Edad mínima, consentimientos que se piden, cookies esenciales y no esenciales.
+    - Responsable del producto: `👤 [completar: nombre y contacto]` hasta que el usuario lo dé.
+    - Accesibilidad: nivel objetivo (WCAG 2.2 AA) y herramienta de verificación en tests.
+    - Documentos legales previstos para el release (`docs/legal/`): siempre BORRADORES.
     ## Convenciones
     Idioma y registro de la interfaz, idioma del código, commits convencionales.
     ## Requisitos del modelo

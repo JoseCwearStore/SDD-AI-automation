@@ -29,8 +29,16 @@ otros). No reabras lo que ya quedó resuelto.
 6. **Acceso y seguridad**: la sección existe; cada acción nueva dice quién puede hacerla;
    lo que no dice "público" es privado y tiene su RF de rechazo (no autenticado, sin
    permiso, recurso ajeno); las entradas externas tienen límites concretos.
+7. **Datos personales y accesibilidad**: las dos secciones existen; cada dato personal
+   tiene finalidad; las pantallas nuevas dicen lo que exigen.
+8. **Aislamiento de tests**: si los criterios usan recursos externos (base de datos,
+   almacenamiento, colas, correo), la spec garantiza que los tests nunca tocan los reales
+   (configuración propia, sin caer en la de desarrollo, validación y fallo explícito).
 
 ## Cómo clasificar cada hallazgo
+Severidad: **bloquea** si deja un RF inverificable, contradictorio o inseguro; **menor** si
+es precisión de redacción que no cambia qué se construye. Con varias rondas, los hallazgos
+menores permiten al coordinador ofrecer la aprobación.
 - **Corrige el planner**: problemas de forma o de redacción que se arreglan sin saber qué
   quiere el usuario (RF sin criterio, EARS mal formado, mención de stack).
 - **Decide el usuario**: huecos que solo se cierran sabiendo qué quiere (comportamiento no
@@ -50,6 +58,7 @@ hallazgos con el número de ronda (H2.1, H2.2…) para poder citarlos sin ambig�
     - **H1.1** · RF3, criterio 2 · ambigüedad
       Qué falla y por qué.
       **Resuelve**: planner | usuario — pregunta cerrada (si es del usuario)
+      **Severidad**: bloquea | menor
       **Estado**: abierto
 
     ### Ronda anterior (solo desde la ronda 2)

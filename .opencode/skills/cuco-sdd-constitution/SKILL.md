@@ -18,7 +18,8 @@ copies: dos fuentes de verdad terminan contradiciéndose.
 Escribe `docs/constitution.md` con entre 6 y 8 principios innegociables. Deben cubrir: stack
 y entorno reproducible, la spec manda sobre el código, arquitectura y dirección de
 dependencias (hexagonal salvo que `AGENTS.md` diga otra), lógica testeable sin
-infraestructura, política de tests, seguridad y privacidad, datos que no se pierden e idioma.
+infraestructura, política de tests, seguridad y privacidad, datos que no se pierden, idioma
+y accesibilidad (si hay interfaz).
 El principio de seguridad resume los controles C1–C10 de `cuco-sdd-security` que aplican al
 proyecto (según la sección "Seguridad" de `AGENTS.md`) y remite a esa auditoría como su
 verificación `[auto]`.

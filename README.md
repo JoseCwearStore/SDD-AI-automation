@@ -12,6 +12,9 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
 - **Seguridad integrada**: 10 controles (rate limiting, secretos, RLS, validación, auth,
   errores, logs…) que se previenen desde la spec y se auditan como **última fase**. Si algo
   falla, vuelve al agente responsable para corregirlo.
+- **Cumplimiento**: privacidad (P1–P12) y accesibilidad WCAG 2.2 AA (A1–A8) en cada spec, y
+  un `/sdd-release` que genera **borradores** legales desde el código y te dice qué es 100%
+  tuyo (revisión legal, datos de la empresa, edad mínima…).
 - **Portable**: no depende del stack (Node, Python, Go, Java, .NET…) ni de servicios externos.
 - **Transparente**: anuncia quién hace qué y te pregunta si revisaste lo generado antes de
   aprobar nada.
@@ -92,7 +95,7 @@ Si ya lo habías renombrado antes, indica el prefijo actual como segundo argumen
 node <ruta-del-kit>/scripts/rename-prefix.mjs shop gym
 ```
 
-El script renombra las 13 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
+El script renombra las 15 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
 archivos de `.opencode/` y en `AGENTS.md`. Después, **reinicia OpenCode**.
 
 ### A mano
@@ -119,6 +122,7 @@ skills y devuelven BLOQUEADO. Tienes que cambiar:
 | `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión → seguridad. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
 | `/sdd-continue <NNN> [indicaciones]` | Retoma una spec existente desde la fase en que quedó (la detecta solo). Nunca crea una spec nueva. |
 | `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión → seguridad. |
+| `/sdd-release [notas]` | Con el producto listo: borradores legales desde el código, revisión de punta a punta y la lista de lo que es tuyo. |
 | `/sdd-change <NNN-spec> <cambio>` | Cambia los requisitos de una spec existente, con análisis de impacto. |
 | `/sdd-constitution [contexto]` | Crea (si no existe) o revisa `docs/constitution.md`. |
 | `/sdd-status [NNN-spec]` | En qué fase está cada spec y cuál es el siguiente paso exacto. |
@@ -131,7 +135,8 @@ Un cambio es **pequeño** solo si cumple TODO:
 - no toca el esquema de datos ni las migraciones,
 - no añade dependencias,
 - no añade ni cambia contratos del borde (API, CLI, eventos),
-- no toca autenticación, autorización, secretos ni datos sensibles.
+- no toca autenticación, autorización, secretos ni datos sensibles,
+- no añade datos personales nuevos ni servicios de terceros.
 
 Si cumple todo → `/sdd-feature`. Si falla uno solo → `/sdd`. Aunque lances `/sdd`, el
 coordinador hace esta triage primero y te recomienda el camino.
@@ -165,7 +170,8 @@ brownfield describe lo que HAY, sin inventar.
 | 6. Revisión de código | reviewer | `review.md`: RF por RF, constitución, arquitectura y alcance |
 | 7. Correcciones | responsable de cada hallazgo | máximo 2 vueltas |
 | 8. 🔒 Seguridad | reviewer | `security.md`: controles C1–C10. Si falla, cada hallazgo vuelve a su responsable (máx. 2 vueltas) |
-| 9. Cierre | implementer + coordinator | `MEMORY.md` actualizado, 🔎 del diff y mensaje de commit propuesto |
+| 9. 📋 Cumplimiento | reviewer | `compliance.md`: privacidad P1–P12 y accesibilidad A1–A8 de lo que tocó la spec; ítems 👤 para ti |
+| 10. Cierre | implementer + coordinator | `MEMORY.md` actualizado, 🔎 del diff y mensaje de commit propuesto |
 
 El commit lo haces **tú**.
 
@@ -198,6 +204,30 @@ La skill `cuco-sdd-security` define 10 controles y trabaja en dos modos:
 Lo concreto de tu stack (qué limitador, qué logger, qué límites) va en la sección
 **"Seguridad"** de `AGENTS.md`, que genera el bootstrap.
 
+### 4. Cumplimiento y release
+
+Dos skills con el mismo patrón que seguridad (GUÍA para prevenir, AUDITORÍA al final de cada
+spec), con controles que aplican o no según la sección **"Cumplimiento"** de `AGENTS.md`
+(jurisdicción, datos personales, pagos, correos, menores…):
+
+- `cuco-sdd-privacy` (P1–P12): minimización, inventario de datos, consentimientos, cookies,
+  terceros y SDKs, eliminación de cuenta, menores, sin patrones oscuros, precios
+  transparentes, contenido honesto, bajas de correo y licencias de multimedia.
+- `cuco-sdd-a11y` (A1–A8, WCAG 2.2 AA): texto alternativo, contraste, teclado, formularios,
+  semántica, cambios dinámicos, zoom y no depender solo del color.
+
+Cada control indica si lo resuelven los agentes (🤖), si lo preparan y tú decides (🤝) o si
+es tuyo (👤). Lo que es global se revisa con **`/sdd-release`**, con el producto listo:
+
+1. Los documentos de `docs/legal/` (privacidad, términos, cookies, contacto…) se generan
+   **a partir del código real** y nacen con el encabezado
+   `⚠️ BORRADOR — … Requiere revisión legal antes de publicarse.` Ningún agente lo quita.
+2. Cada documento termina con **"👤 Te corresponde a ti"**: datos reales, decisiones y la
+   revisión de un profesional de tu jurisdicción.
+3. El release **no está listo** mientras quede un borrador o un ítem 👤 pendiente.
+
+> El kit no da asesoría legal: los borradores te ahorran trabajo, no sustituyen a un abogado.
+
 ### Transparencia
 
 Durante todo el flujo, el coordinador:
@@ -211,10 +241,10 @@ Durante todo el flujo, el coordinador:
 | Agente | Rol | Puede escribir |
 |--------|-----|----------------|
 | `coordinator` | Dirige el flujo y es el único que habla contigo | Nada |
-| `planner` | Visión, specs, plan, tareas y archivos de gobierno | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md` |
+| `planner` | Visión, specs, plan, tareas, archivos de gobierno y borradores legales | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md`, `docs/legal/*.md` |
 | `tester` | Tests de aceptación | Solo carpetas `acceptance/` |
-| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
-| `reviewer` | Revisa la spec, el código y la seguridad | Solo sus informes: `specs/**/clarify.md`, `review.md` y `security.md` |
+| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
+| `reviewer` | Revisa la spec, el código, la seguridad y el cumplimiento | Solo sus informes: `clarify.md`, `review.md`, `security.md`, `compliance.md` y `docs/release/release.md` |
 
 Ningún agente puede **leer** los `.env` (salvo `.env.example`), así un secreto nunca termina
 en el chat. Ningún agente puede hacer `git commit`, `git push` ni borrados recursivos. Los comandos de
@@ -228,7 +258,7 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
 - **Constitución**: cada principio se verifica con `Verificar [auto]` (lo comprueba el
   reviewer) y/o `Verificar [manual]` (te lo lista a ti: el reviewer nunca lo da por hecho).
 - **Specs**: `specs/NNN-nombre/` con `spec.md`, `clarify.md`, `plan.md`, `tasks.md`,
-  `review.md` y `security.md`. Los informes de revisión se escriben por rondas
+  `review.md`, `security.md` y `compliance.md`. Los informes de revisión se escriben por rondas
   (`## Ronda N`) y nunca se borran: son la memoria que permite retomar con `/sdd-continue`.
 - **Skills = CÓMO · AGENTS.md y constitución = QUÉ · agentes = QUIÉN.** Las skills no nombran
   módulos ni comandos concretos: los leen de `AGENTS.md`.
@@ -238,8 +268,8 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
 ```
 .opencode/
 ├── agents/      coordinator, planner, tester, implementer, reviewer
-├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-bootstrap, sdd-constitution, sdd-status
-└── skills/      cuco-sdd-<fase>/SKILL.md (13 skills: una por fase + seguridad)
+├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-release, sdd-bootstrap, sdd-constitution, sdd-status
+└── skills/      cuco-sdd-<fase>/SKILL.md (15 skills: una por fase + seguridad, privacidad y accesibilidad)
 opencode.json    default_agent: coordinator
 scripts/
 ├── install.mjs        instala o actualiza el kit en un proyecto

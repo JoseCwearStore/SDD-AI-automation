@@ -5,8 +5,8 @@ description: SDD · Valida la implementación de una spec RF por RF (o un cambio
 Si no existe `AGENTS.md`, o le falta una sección que esta skill necesita, PARA y devuelve
 BLOQUEADO indicando qué falta y recomendando `/sdd-bootstrap`.
 
-La seguridad (controles C1–C10) la audita después, como última fase, `cuco-sdd-security`:
-aquí no la repitas. Si ves un problema de seguridad evidente, anótalo como "Opcional" con
+La seguridad (C1–C10, `cuco-sdd-security`) y el cumplimiento (P1–P12 y A1–A8,
+`cuco-sdd-privacy` y `cuco-sdd-a11y`) se auditan después, en sus fases: aquí no los repitas. Si ves un problema de seguridad evidente, anótalo como "Opcional" con
 una referencia al control.
 
 ## Constitución: checks automáticos y manuales (vale en los dos modos)
@@ -54,7 +54,8 @@ Los checks de la sección "Constitución" de arriba.
 
 ## 4. Arquitectura y convenciones
 Comprueba las reglas de las secciones "Arquitectura" y "Tests" de `AGENTS.md` sobre los
-archivos del diff.
+archivos del diff. Los tests que tocan recursos externos respetan el "Aislamiento" del plan
+(configuración propia, sin caer en la de desarrollo, fallan en vez de saltearse).
 
 ## 5. Alcance
 Compara el diff con `plan.md`: un archivo o comportamiento que el plan no menciona es un
