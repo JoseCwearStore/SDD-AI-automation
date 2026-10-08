@@ -53,6 +53,10 @@ Si la spec tiene interfaz, carga también `cuco-sdd-a11y` en modo GUÍA: consult
 nombre accesible, y tests de teclado.
 
 ## Límites (valen siempre)
+- Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
+  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
+  por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
 - Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal
   (redirecciones `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`, `echo … >`…): los
   permisos de edición protegen rutas, y escribir por la terminal se los salta.

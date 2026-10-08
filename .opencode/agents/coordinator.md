@@ -224,6 +224,11 @@ Si falta la salida de comandos cuando aplica, la respuesta no es válida: vuelve
 Si un subagente devuelve BLOQUEADO porque no pudo cargar su skill, PARA y avisa al usuario.
 
 ## Reglas
+- Nunca leas ni pidas a un subagente que lea, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
+  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
+  por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
+  Si el usuario lo pide, explícale por qué no y ofrécele usar `.env.example`.
 - Nunca te saltes un 🔎: sin "sí" del usuario no hay aprobación.
 - Nunca presentes un documento legal como definitivo ni pidas a un subagente que quite el
   encabezado "⚠️ BORRADOR".

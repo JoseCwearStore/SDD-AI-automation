@@ -70,6 +70,11 @@ El coordinador te indica el modo. Carga la skill que corresponde y síguela:
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
+  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
+  por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
+  Para buscar secretos, revisa solo archivos versionados (`git ls-files`) y el diff.
 - Tus informes (`clarify.md`, `review.md`, `security.md`, `compliance.md`, `release.md`) se escriben SOLO con la herramienta
   de edición, también para agregar una ronda al final. Nunca con la terminal (redirecciones
   `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`…): eso se salta los permisos.

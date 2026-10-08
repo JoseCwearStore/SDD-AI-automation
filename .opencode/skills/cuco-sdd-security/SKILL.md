@@ -11,7 +11,9 @@ Lo concreto del stack (librerías, límites, nombres de roles) está en la secci
 de `AGENTS.md`: esta skill define QUÉ controlar y CÓMO comprobarlo.
 
 ## Reglas que valen siempre
-- Nunca leas `.env` ni `.env.*` (salvo `.env.example`), ni muestres el valor de un secreto.
+- Nunca leas `.env` ni `.env.*` (salvo `.env.example`), ni los busques apuntando a ellos, ni
+  muestres el valor de un secreto. La búsqueda de contenido de OpenCode no se puede bloquear
+  por ruta: buscar secretos solo en archivos versionados (`git ls-files`) y en el diff.
   Si encuentras uno, informa solo `archivo:línea` y el tipo (ej. "clave privada").
 - Seguridad por defecto: si no está claro que algo sea público, es privado.
 - En hexagonal: la **autenticación** (quién eres) vive en `infrastructure/` (middleware,
@@ -40,6 +42,10 @@ profundidad: la autorización principal sigue en el dominio.
 **C4 · Variables de entorno fuera de git.** `.env` y `.env.*` en `.gitignore`, salvo
 `.env.example`, que solo lleva nombres y valores de ejemplo (nunca reales). Ningún secreto
 en el diff. Variables nuevas: se añaden a `.env.example` con un valor ficticio.
+**Solo secretos de desarrollo en local**: el `.env` de la máquina de desarrollo lleva
+valores de desarrollo; los secretos de producción nunca están en el proyecto ni en la
+máquina de desarrollo (van en el hosting o en un gestor de secretos). Así, si un agente o
+una herramienta llegara a leer el `.env` local, no expone nada de producción.
 
 **C5 · Validación de entradas.** Toda entrada externa (body, query, params, headers,
 archivos, mensajes) se valida en el borde (`infrastructure/`) con un esquema: tipo,
@@ -117,7 +123,8 @@ Comprobaciones mínimas por control (además de leer el código del diff):
   c.relkind = 'r' AND n.nspname NOT IN ('pg_catalog','information_schema') AND
   (NOT c.relrowsecurity OR NOT c.relforcerowsecurity);`
 - C4: `.gitignore` cubre `.env*` salvo `.env.example`; `git ls-files` no lista ningún
-  `.env` real; `.env.example` sin valores reales.
+  `.env` real; `.env.example` sin valores reales. MANUAL para el usuario: que el `.env`
+  local solo tenga secretos de desarrollo.
 - C5: cada entrada nueva tiene esquema de validación y un test con entrada inválida.
 - C6: migraciones y scripts sin `GRANT … TO PUBLIC` ni roles con superusuario; puerto de la
   base no publicado en la configuración de producción.

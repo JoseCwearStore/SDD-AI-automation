@@ -180,7 +180,8 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Exposición: público en internet o no; qué se puede usar sin cuenta.
     - Rate limiting (C1): herramienta y límites (ej. login: N intentos por IP y minuto).
     - Secretos (C2, C4): dónde viven, cómo se leen, qué prefijo de variable llega al
-      navegador (y por tanto nunca lleva secretos).
+      navegador (y por tanto nunca lleva secretos). El `.env` local solo lleva secretos de
+      desarrollo; los de producción viven fuera del proyecto (hosting o gestor de secretos).
     - Base de datos (C3, C6): motor; si es PostgreSQL/Supabase, RLS con ENABLE + FORCE y
       políticas; rol de la app con mínimo privilegio; puerto no expuesto.
     - Entradas (C5): dónde y con qué se validan.

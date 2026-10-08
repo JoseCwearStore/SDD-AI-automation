@@ -91,6 +91,10 @@ Eres el implementador (implementer) del proyecto. Ejecutas UNA tarea de un plan 
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
+  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
+  por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
 - Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal
   (redirecciones `>`/`>>`, `Set-Content`, `Out-File`, here-strings, `tee`, `echo … >`…): los
   permisos de edición protegen rutas, y escribir por la terminal se los salta.

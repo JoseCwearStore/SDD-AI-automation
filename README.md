@@ -296,6 +296,23 @@ scripts/
   agentes tienen prohibido hacerlo y `bash` está en `ask` por defecto. Si OpenCode te pide
   permiso para un comando que escribe un archivo, **recházalo** y nunca uses "Always allow"
   con comandos genéricos.
+- **`read: deny` no protege del todo los `.env`.** Cada permiso compara contra algo distinto:
+  `read` contra la ruta, pero `grep` contra **el texto buscado**, y cada permiso se evalúa por
+  separado. Una búsqueda de contenido apuntando al `.env` lo muestra aunque `read` esté
+  bloqueado (verificado en una prueba real). Una búsqueda por todo el proyecto no lo
+  encuentra, pero solo porque ripgrep ignora lo que está en `.gitignore`: es una costumbre de
+  la herramienta, no un candado. Por eso el kit usa capas:
+  1. **Los agentes tienen prohibido** leer, buscar o pasar rutas `.env*` a cualquier
+     herramienta (criterio del agente, no candado).
+  2. **El `.env` local solo lleva secretos de desarrollo**; los de producción nunca están en
+     el proyecto ni en la máquina de desarrollo (hosting o gestor de secretos). Si algo se
+     filtra, no expone producción.
+  3. **Candado fuerte, opcional:** si el proyecto maneja secretos sensibles incluso en
+     desarrollo (pagos, salud…), guárdalos **fuera de la carpeta del proyecto** (ej.
+     `../secretos/proyecto.env`, cargado con `env_file` o `--env-file` de Docker Compose) y
+     deja `external_directory: deny` en los agentes. OpenCode aplica `external_directory` a
+     `read`, `grep` y `glob`, así que ese archivo queda realmente fuera de su alcance. Cuesta
+     más configuración; para la mayoría de proyectos bastan las capas 1 y 2.
 - Un permiso que no probaste no está verificado: después de instalar, prueba con cada agente
   un caso **permitido** y uno **denegado**.
 

@@ -50,6 +50,10 @@ El coordinador te indica la fase. Carga la skill que corresponde y síguela:
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)
+- Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
+  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
+  por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
 - Nunca escribes código ni tests.
 - Los documentos de `docs/legal/` son BORRADORES: nunca quitas su encabezado "⚠️ BORRADOR"
   ni inventas datos reales (razón social, contacto, cifras): dejas `👤 [completar: …]`.
