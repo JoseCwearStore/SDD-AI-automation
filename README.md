@@ -15,6 +15,9 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
 - **Cumplimiento**: privacidad (P1–P12) y accesibilidad WCAG 2.2 AA (A1–A8) en cada spec, y
   un `/sdd-release` que genera **borradores** legales desde el código y te dice qué es 100%
   tuyo (revisión legal, datos de la empresa, edad mínima…).
+- **Diseño consistente**: un sistema de diseño mínimo (paleta con contraste verificado y
+  tipografía) antes de la primera pantalla, creado desde cero o desde tus referencias
+  (Figma exportado, plantillas, capturas, manual de marca).
 - **Portable**: no depende del stack (Node, Python, Go, Java, .NET…) ni de servicios externos.
 - **Transparente**: anuncia quién hace qué y te pregunta si revisaste lo generado antes de
   aprobar nada.
@@ -95,7 +98,7 @@ Si ya lo habías renombrado antes, indica el prefijo actual como segundo argumen
 node <ruta-del-kit>/scripts/rename-prefix.mjs shop gym
 ```
 
-El script renombra las 15 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
+El script renombra las 16 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
 archivos de `.opencode/` y en `AGENTS.md`. Después, **reinicia OpenCode**.
 
 ### A mano
@@ -122,6 +125,7 @@ skills y devuelven BLOQUEADO. Tienes que cambiar:
 | `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión → seguridad. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
 | `/sdd-continue <NNN> [indicaciones]` | Retoma una spec existente desde la fase en que quedó (la detecta solo). Nunca crea una spec nueva. |
 | `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión → seguridad. |
+| `/sdd-design [indicaciones]` | Crea o actualiza el sistema de diseño (paleta, tipografía) desde cero o desde `docs/design/references/`. Obligatorio antes de la primera spec con pantallas. |
 | `/sdd-release [notas]` | Con el producto listo: borradores legales desde el código, revisión de punta a punta y la lista de lo que es tuyo. |
 | `/sdd-change <NNN-spec> <cambio>` | Cambia los requisitos de una spec existente, con análisis de impacto. |
 | `/sdd-constitution [contexto]` | Crea (si no existe) o revisa `docs/constitution.md`. |
@@ -228,6 +232,26 @@ es tuyo (👤). Lo que es global se revisa con **`/sdd-release`**, con el produc
 
 > El kit no da asesoría legal: los borradores te ahorran trabajo, no sustituyen a un abogado.
 
+### 5. Diseño (`/sdd-design`)
+
+Antes de la primera spec con pantallas, el coordinador exige `docs/design/design-system.md`:
+la **fuente de verdad visual**. Mínimo: paleta con roles (primario, fondo, texto, error…),
+**tabla de pares de contraste** (WCAG AA, conectada con el control A2 de accesibilidad) y
+tipografía (familias con licencia y escala de tamaños). En el código, todo sale de los tokens:
+un color o una fuente escritos a mano son un hallazgo de revisión, y la primera spec con
+pantallas incluye un test que verifica los contrastes.
+
+- **Sin material de diseño**: te propone 2 o 3 opciones con su contraste calculado y eliges.
+- **Con referencias**: déjalas en `docs/design/references/` (capturas, plantillas HTML/CSS,
+  manual de marca en PDF, variables exportadas en JSON). Analizar imágenes requiere un
+  modelo con visión en OpenCode.
+- **Figma**: un link solo no sirve (los agentes no pueden abrirlo). Dos caminos:
+  - **A (recomendado, sin dependencias)**: exporta los frames como PNG y las variables o
+    estilos como JSON a `docs/design/references/`. Si el diseño cambia, vuelve a exportar.
+  - **B (opcional)**: configura en OpenCode el servidor MCP oficial de Figma, para que los
+    agentes lean el archivo directamente. Siempre actualizado, pero suma una dependencia
+    externa y un token de Figma; habilítalo solo en los agentes que lo necesiten.
+
 ### Transparencia
 
 Durante todo el flujo, el coordinador:
@@ -241,9 +265,9 @@ Durante todo el flujo, el coordinador:
 | Agente | Rol | Puede escribir |
 |--------|-----|----------------|
 | `coordinator` | Dirige el flujo y es el único que habla contigo | Nada |
-| `planner` | Visión, specs, plan, tareas, archivos de gobierno y borradores legales | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md`, `docs/legal/*.md` |
+| `planner` | Visión, specs, plan, tareas, archivos de gobierno, diseño y borradores legales | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md`, `docs/design/*.md`, `docs/legal/*.md` |
 | `tester` | Tests de aceptación | Solo carpetas `acceptance/` |
-| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
+| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/`, `docs/design/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
 | `reviewer` | Revisa la spec, el código, la seguridad y el cumplimiento | Solo sus informes: `clarify.md`, `review.md`, `security.md`, `compliance.md` y `docs/release/release.md` |
 
 Ningún agente puede **leer** los `.env` (salvo `.env.example`), así un secreto nunca termina
@@ -268,8 +292,8 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
 ```
 .opencode/
 ├── agents/      coordinator, planner, tester, implementer, reviewer
-├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-release, sdd-bootstrap, sdd-constitution, sdd-status
-└── skills/      cuco-sdd-<fase>/SKILL.md (15 skills: una por fase + seguridad, privacidad y accesibilidad)
+├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-design, sdd-release, sdd-bootstrap, sdd-constitution, sdd-status
+└── skills/      cuco-sdd-<fase>/SKILL.md (16 skills: una por fase + seguridad, privacidad, accesibilidad y diseño)
 opencode.json    default_agent: coordinator
 scripts/
 ├── install.mjs        instala o actualiza el kit en un proyecto

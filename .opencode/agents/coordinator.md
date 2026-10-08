@@ -48,7 +48,11 @@ Arquitectura, Reglas de dominio, Tests, Seguridad y Cumplimiento), `docs/constit
 `MEMORY.md`. Si falta
 algo: PARA, di exactamente qué falta y recomienda `/sdd-bootstrap` (o `/sdd-constitution` si
 solo falta la constitución).
-No aplica a `/sdd-bootstrap`, `/sdd-constitution` ni `/sdd-status`.
+Si la petición o la spec tiene interfaz de usuario (su sección "Accesibilidad" no dice
+"Sin interfaz"), comprueba además que existe `docs/design/design-system.md` aprobado; si
+no, PARA y recomienda `/sdd-design` (sin sistema de diseño, cada pantalla inventaría sus
+colores y tipografías).
+No aplica a `/sdd-bootstrap`, `/sdd-constitution`, `/sdd-design` ni `/sdd-status`.
 
 ## Fase 0: Triage (al empezar /sdd)
 Si la petición se refiere a una spec que ya existe en `specs/` (por número, nombre o
@@ -86,6 +90,8 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
      criterios de la Fase 0.
    - `/sdd-feature <petición>`: flujo liviano para cambios pequeños.
    - `/sdd-continue <NNN>`: retomar una spec que ya existe desde la fase en que quedó.
+   - `/sdd-design`: sistema de diseño (paleta y tipografía), obligatorio antes de la
+     primera spec con pantallas; acepta referencias en `docs/design/references/`.
    - `/sdd-release`: cuando el producto esté listo, borradores legales y revisión final.
    El siguiente paso recomendado es la primera spec del roadmap: `/sdd-continue <NNN>` si ya
    existe en `specs/`, o `/sdd <objetivo de esa spec>` si todavía no existe.
@@ -107,8 +113,8 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
    🔎 `spec.md` (y `clarify.md` si el usuario quiere ver el historial). Con el "sí", @planner
    la marca como aprobada.
 3. **Plan y tareas** → @planner con `cuco-sdd-plan` (y, en modo GUÍA, `cuco-sdd-security`
-   para "Seguridad" y `cuco-sdd-privacy` + `cuco-sdd-a11y` para "Cumplimiento") y después
-   con `cuco-sdd-tasks`. Resume todo lo marcado con ⚠️ y
+   para "Seguridad", `cuco-sdd-privacy` + `cuco-sdd-a11y` para "Cumplimiento" y, si hay
+   pantallas, `cuco-sdd-design` para "Diseño") y después con `cuco-sdd-tasks`. Resume todo lo marcado con ⚠️ y
    la lista de rutas públicas. 🔎 `plan.md` y `tasks.md`.
 4. **Tests de aceptación** → @tester con `cuco-sdd-tests` (y `cuco-sdd-a11y` en modo GUÍA si
    la spec tiene interfaz). Comprueba en su tabla de cobertura
@@ -169,6 +175,16 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
 (`cuco-sdd-plan`) y las tareas (`cuco-sdd-tasks`) → 🔎 `plan.md` y `tasks.md` → @tester
 ajusta los tests de los RF afectados → @implementer ejecuta las tareas nuevas → @reviewer
 revisa → 🔒 auditoría de seguridad (fase 8) → 📋 cumplimiento (fase 9).
+
+## Diseño (/sdd-design)
+1. Pregunta al usuario si tiene referencias (capturas, frames exportados de Figma, variables
+   o estilos en JSON, plantillas HTML/CSS, manual de marca) y pídele que las deje en
+   `docs/design/references/`. Un link de Figma solo no sirve: los agentes no pueden
+   abrirlo; necesita exportarlo o configurar el servidor MCP de Figma (ver README del kit).
+2. @planner con `cuco-sdd-design` en modo CREAR. Si devuelve PREGUNTAS (elegir entre las
+   opciones propuestas o resolver referencias contradictorias), házselas de una en una.
+3. 🔎 `docs/design/design-system.md`, mostrando la tabla de pares de contraste. Con el
+   "sí", @planner lo marca como aprobado.
 
 ## Release (/sdd-release)
 Revisión del producto completo antes de publicarlo. No sustituye a la revisión legal.

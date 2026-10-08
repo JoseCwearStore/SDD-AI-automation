@@ -83,6 +83,9 @@ señala sus riesgos.
 - Organización de carpetas (monorepo o no) siguiendo la arquitectura elegida.
 - Persistencia: tipo de base de datos y herramienta de acceso.
 - Autenticación y autorización, si hay usuarios.
+- Diseño, si hay interfaz: ¿tiene referencias (Figma exportado, plantillas, capturas,
+  manual de marca)? Si las tiene, que las deje en `docs/design/references/`. El sistema de
+  diseño se crea con `/sdd-design` antes de la primera spec con pantallas.
 - Seguridad del borde: limitador de peticiones, validación de entradas, logger y, si la
   base es PostgreSQL o Supabase, la estrategia de RLS (los 10 controles de
   `cuco-sdd-security`). Para las librerías, propón opciones como en el resto.
@@ -197,6 +200,11 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Responsable del producto: `👤 [completar: nombre y contacto]` hasta que el usuario lo dé.
     - Accesibilidad: nivel objetivo (WCAG 2.2 AA) y herramienta de verificación en tests.
     - Documentos legales previstos para el release (`docs/legal/`): siempre BORRADORES.
+    ## Diseño (solo si hay interfaz)
+    Fuente de verdad visual: `docs/design/design-system.md` (paleta con roles y contraste,
+    tipografía). Referencias en `docs/design/references/`. En el código, solo tokens:
+    ningún color, fuente o espaciado literal. Si todavía no existe: "Pendiente: /sdd-design
+    antes de la primera spec con pantallas".
     ## Convenciones
     Idioma y registro de la interfaz, idioma del código, commits convencionales.
     ## Requisitos del modelo

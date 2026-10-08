@@ -18,7 +18,8 @@ decorativa, `alt=""`. Los botones e iconos sin texto visible tienen nombre acces
 
 **A2 · Contraste.** Texto normal ≥ 4.5:1; texto grande (≥ 24 px, o 19 px en negrita) y
 componentes de interfaz (bordes de campos, iconos con significado, foco) ≥ 3:1, también en
-estados hover, foco, deshabilitado y en modo oscuro si existe.
+estados hover, foco, deshabilitado y en modo oscuro si existe. Los pares de base están
+en la tabla de contraste de `docs/design/design-system.md`.
 
 **A3 · Teclado.** Todo lo que se hace con el ratón se hace con el teclado (Tab, Shift+Tab,
 Enter, Espacio, Escape, flechas donde corresponda), en un orden lógico, sin trampas de foco.

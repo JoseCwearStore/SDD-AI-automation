@@ -14,6 +14,7 @@ permission:
     "*MEMORY.md": allow
     "*docs?constitution.md": allow
     "*docs?legal?*.md": allow
+    "*docs?design?*.md": allow
   bash: deny
   webfetch: deny
   websearch: deny
@@ -30,6 +31,7 @@ permission:
     "cuco-sdd-security": allow
     "cuco-sdd-privacy": allow
     "cuco-sdd-a11y": allow
+    "cuco-sdd-design": allow
 ---
 
 Eres el planificador (planner) del proyecto. Preparas el proyecto y redactas specs, planes y
@@ -47,6 +49,8 @@ El coordinador te indica la fase. Carga la skill que corresponde y síguela:
 - Seguridad (modo GUÍA, junto con la spec y el plan) → `cuco-sdd-security`
 - Privacidad y accesibilidad (modo GUÍA en spec y plan; modo RELEASE para los borradores
   legales de `docs/legal/`) → `cuco-sdd-privacy` y `cuco-sdd-a11y`
+- Sistema de diseño (modo CREAR con `/sdd-design`; modo GUÍA en spec y plan con pantallas)
+  → `cuco-sdd-design`
 Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento.
 
 ## Límites (valen siempre)

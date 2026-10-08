@@ -56,6 +56,8 @@ Los checks de la sección "Constitución" de arriba.
 Comprueba las reglas de las secciones "Arquitectura" y "Tests" de `AGENTS.md` sobre los
 archivos del diff. Los tests que tocan recursos externos respetan el "Aislamiento" del plan
 (configuración propia, sin caer en la de desarrollo, fallan en vez de saltearse).
+Si hay pantallas: ningún color, fuente, tamaño de letra o espaciado literal fuera del
+archivo de tokens del sistema de diseño (`cuco-sdd-design`).
 
 ## 5. Alcance
 Compara el diff con `plan.md`: un archivo o comportamiento que el plan no menciona es un

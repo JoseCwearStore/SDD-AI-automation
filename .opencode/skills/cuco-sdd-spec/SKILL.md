@@ -54,7 +54,8 @@ Plantilla:
 
     ## Accesibilidad
     Según `cuco-sdd-a11y` (modo GUÍA): pantallas nuevas o cambiadas y lo que exigen más
-    allá de lo obvio. Si no hay interfaz: "Sin interfaz".
+    allá de lo obvio, con su referencia visual de `docs/design/references/` si existe.
+    Si no hay interfaz: "Sin interfaz".
 
     ## Fuera de alcance
     Lo que explícitamente NO se hace en esta versión.

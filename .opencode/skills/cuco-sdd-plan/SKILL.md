@@ -75,6 +75,12 @@ Con `cuco-sdd-privacy` y `cuco-sdd-a11y` en modo GUÍA y la sección "Cumplimien
 "No aplica: por qué". Servicios o SDKs nuevos, con los datos que reciben, y herramientas de
 accesibilidad para tests → también en "⚠️ Requiere aprobación".
 
+## 11. Diseño (solo si hay pantallas)
+Con `cuco-sdd-design` en modo GUÍA: qué tokens y componentes usa cada pantalla, y su
+referencia visual si existe. En la primera spec con pantallas, incluye la tarea que crea
+los tokens en código desde `docs/design/design-system.md` y el test de sus pares de
+contraste. Si no hay pantallas: "No aplica".
+
 ## Reglas
 - Todo respeta la dirección de dependencias de la sección "Arquitectura" de `AGENTS.md`.
 - No añadas nada que la spec no pida: si algo parece necesario y no está en la spec,
