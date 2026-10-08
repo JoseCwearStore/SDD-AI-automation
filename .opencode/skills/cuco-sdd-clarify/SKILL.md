@@ -1,13 +1,19 @@
 ---
 name: cuco-sdd-clarify
-description: SDD · Revisa una spec como QA antes de aprobarla (solo detecta, no resuelve). Verifica calidad, no intención del usuario.
+description: SDD · Revisa una spec como QA antes de aprobarla (solo detecta, no resuelve) y guarda los hallazgos en clarify.md para que sobrevivan entre sesiones. Verifica calidad, no intención del usuario.
 ---
 Si no existe `AGENTS.md`, o le falta una sección que esta skill necesita, PARA y devuelve
 BLOQUEADO indicando qué falta y recomendando `/sdd-bootstrap`.
 
 Revisa `specs/NNN-nombre/spec.md` (la ruta te la pasa el coordinador) como un QA exigente.
-Lee también `docs/constitution.md` y `AGENTS.md`. Solo detecta: no propongas soluciones ni
-reescribas la spec.
+Lee también `docs/constitution.md`, `AGENTS.md` y `specs/NNN-nombre/clarify.md` si existe.
+Solo detecta: no propongas soluciones ni reescribas la spec.
+
+## 0. Si existe un `clarify.md` anterior (ronda 2 o más)
+Primero verifica UNO POR UNO los hallazgos de la ronda anterior contra la spec actual:
+resuelto | no resuelto | resuelto con decisión del usuario (si el planner anotó una).
+Después revisa la spec completa en busca de hallazgos NUEVOS (los cambios pueden abrir
+otros). No reabras lo que ya quedó resuelto.
 
 ## Qué revisar
 1. **Ambigüedades**: requisitos que admiten más de una interpretación o no se pueden verificar.
@@ -32,11 +38,28 @@ reescribas la spec.
 
 Nunca resuelvas un hallazgo de "Decide el usuario" suponiendo la respuesta.
 
-## Respuesta
-Primera línea: `VEREDICTO: SPEC LISTA` o `VEREDICTO: SPEC CON PROBLEMAS`.
+## Guarda los hallazgos en `specs/NNN-nombre/clarify.md`
+Es la memoria de esta revisión: sin él, el detalle se pierde al cerrar la sesión. Si ya
+existe, agrega `## Ronda N` debajo de la anterior: no borres el historial. Numera los
+hallazgos con el número de ronda (H2.1, H2.2…) para poder citarlos sin ambigüedad.
 
-Hallazgos numerados, cada uno con:
-- Ubicación (RF, criterio o sección)
-- Categoría (ambigüedad | contradicción | caso límite | testabilidad | forma | seguridad)
-- Qué falla y por qué
-- **Resuelve**: planner | usuario (con la pregunta)
+    ## Ronda 1
+    VEREDICTO: SPEC LISTA | SPEC CON PROBLEMAS
+
+    ### Hallazgos
+    - **H1.1** · RF3, criterio 2 · ambigüedad
+      Qué falla y por qué.
+      **Resuelve**: planner | usuario — pregunta cerrada (si es del usuario)
+      **Estado**: abierto
+
+    ### Ronda anterior (solo desde la ronda 2)
+    - H1.1: resuelto | no resuelto | resuelto con decisión del usuario
+
+El planner, al corregir, cambia el **Estado** de cada hallazgo a `resuelto` y, si lo decidió
+el usuario, anota `Decisión del usuario: …`. Así la siguiente ronda y `/sdd-continue` tienen
+el detalle completo. Si no puedes escribir el archivo, dilo en "Dudas o decisiones" y
+devuelve los hallazgos completos en tu respuesta.
+
+## Respuesta
+Primera línea: el mismo VEREDICTO. Después, los hallazgos de esta ronda con el mismo formato
+del archivo y el resultado de la ronda anterior.

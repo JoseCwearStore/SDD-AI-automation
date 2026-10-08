@@ -8,7 +8,8 @@ No modifiques ningún archivo. Lee `MEMORY.md` y la carpeta de la spec que te in
 ## Cómo deducir la fase (de la primera que NO se cumple)
 1. Existe `spec.md` → si no: sin spec.
 2. `spec.md` tiene "Estado: aprobada" → si no: fase 1-2 (spec en borrador, pendiente de
-   revisión o de aprobación del usuario).
+   revisión o de aprobación del usuario). Si existe `clarify.md`, indica el veredicto de su
+   última ronda y cuántos hallazgos siguen abiertos (y de quién: planner o usuario).
 3. Existen `plan.md` y `tasks.md` → si no: fase 3 (plan y tareas).
 4. Existen tests de aceptación con nombre `NNN-RFn:` (NNN = número de ESTA spec) para todos
    los RF no eliminados de la spec (busca en las carpetas `acceptance/` que define

@@ -158,7 +158,7 @@ brownfield describe lo que HAY, sin inventar.
 |------|-------|-----------|
 | 0. Triage | coordinator | ¿flujo completo o `/sdd-feature`? |
 | 1. Spec | planner | `specs/NNN-nombre/spec.md` (requisitos EARS + criterios Dado/Cuando/Entonces) |
-| 2. Revisión de spec | reviewer | ambigüedades, contradicciones, casos límite → 🔎 tu aprobación |
+| 2. Revisión de spec | reviewer | `clarify.md`: ambigüedades, contradicciones, casos límite, por rondas hasta `SPEC LISTA` → 🔎 tu aprobación |
 | 3. Plan y tareas | planner | `plan.md` y `tasks.md` (máx. 10 tareas) → 🔎 tu aprobación |
 | 4. Tests de aceptación | tester | un test por criterio, en rojo por la razón correcta |
 | 5. Implementación | implementer | UNA tarea por delegación, con TDD |
@@ -214,7 +214,7 @@ Durante todo el flujo, el coordinador:
 | `planner` | Visión, specs, plan, tareas y archivos de gobierno | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md` |
 | `tester` | Tests de aceptación | Solo carpetas `acceptance/` |
 | `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
-| `reviewer` | Revisa la spec, el código y la seguridad | Solo `specs/**/review.md` y `specs/**/security.md` |
+| `reviewer` | Revisa la spec, el código y la seguridad | Solo sus informes: `specs/**/clarify.md`, `review.md` y `security.md` |
 
 Ningún agente puede **leer** los `.env` (salvo `.env.example`), así un secreto nunca termina
 en el chat. Ningún agente puede hacer `git commit`, `git push` ni borrados recursivos. Los comandos de
@@ -227,8 +227,9 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
   uno mismo`). El prefijo de spec evita choques entre specs.
 - **Constitución**: cada principio se verifica con `Verificar [auto]` (lo comprueba el
   reviewer) y/o `Verificar [manual]` (te lo lista a ti: el reviewer nunca lo da por hecho).
-- **Specs**: `specs/NNN-nombre/` con `spec.md`, `plan.md`, `tasks.md`, `review.md` y
-  `security.md`.
+- **Specs**: `specs/NNN-nombre/` con `spec.md`, `clarify.md`, `plan.md`, `tasks.md`,
+  `review.md` y `security.md`. Los informes de revisión se escriben por rondas
+  (`## Ronda N`) y nunca se borran: son la memoria que permite retomar con `/sdd-continue`.
 - **Skills = CÓMO · AGENTS.md y constitución = QUÉ · agentes = QUIÉN.** Las skills no nombran
   módulos ni comandos concretos: los leen de `AGENTS.md`.
 

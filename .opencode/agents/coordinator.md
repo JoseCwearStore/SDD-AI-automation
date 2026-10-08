@@ -90,9 +90,13 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
 ## Fases del flujo completo (en cada delegación, indica la skill que debe cargar)
 1. **Spec** → @planner con `cuco-sdd-spec` y `cuco-sdd-security` en modo GUÍA. Si devuelve
    PREGUNTAS, házselas al usuario de una en una y vuelve a llamarle con las respuestas.
-2. **Revisión de spec** → @reviewer con `cuco-sdd-clarify`. Los hallazgos "Resuelve: planner"
-   van a @planner; los "Resuelve: usuario", házselos al usuario de uno en uno y pasa las
-   respuestas a @planner. 🔎 `spec.md`. Con el "sí", @planner la marca como aprobada.
+2. **Revisión de spec** → @reviewer con `cuco-sdd-clarify`, que guarda sus hallazgos en
+   `specs/NNN/clarify.md`. Los "Resuelve: planner" van a @planner (pásale la ruta de
+   `clarify.md` y los ids, ej. H1.3); los "Resuelve: usuario", házselos al usuario de uno en
+   uno y pasa las respuestas a @planner, que las anota en `clarify.md` como "Decisión del
+   usuario". Después, otra ronda de @reviewer hasta `SPEC LISTA` (si tras 3 rondas sigue con
+   problemas, PARA y explícale al usuario qué queda). 🔎 `spec.md` (y `clarify.md` si el
+   usuario quiere ver el historial). Con el "sí", @planner la marca como aprobada.
 3. **Plan y tareas** → @planner con `cuco-sdd-plan` (y `cuco-sdd-security` en modo GUÍA para
    la sección "Seguridad") y después con `cuco-sdd-tasks`. Resume todo lo marcado con ⚠️ y
    la lista de rutas públicas. 🔎 `plan.md` y `tasks.md`.
@@ -130,7 +134,9 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
 3. Comprueba que existe `specs/NNN-*/`. Si no existe, dilo y recomienda `/sdd`. PARA.
 4. Carga `cuco-sdd-status` para esa spec y dile al usuario, en una línea:
    `↻ Spec NNN · fase <N> · siguiente: @<agente> con <skill> · <qué hará>`.
-   Incluye lo pendiente de esa spec que figure en `MEMORY.md` ("Pendiente para retomar").
+   Incluye lo pendiente de esa spec: los hallazgos abiertos de `specs/NNN/clarify.md` (si
+   existe; es la fuente con el detalle) y lo que figure en `MEMORY.md` ("Pendiente para
+   retomar").
 5. Continúa en esa fase de "Fases del flujo completo" y sigue desde ahí con normalidad (con
    todos sus 🔎). La Fase 0 y la fase 1 no se repiten: la spec ya existe.
    - Si la spec está en borrador, la fase es la 2 (revisión de spec), aunque falten

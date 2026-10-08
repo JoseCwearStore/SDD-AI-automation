@@ -29,6 +29,7 @@ Si el cambio es ambiguo: devuelve PREGUNTAS (máximo 5).
   en tareas nuevas.
 - **Tests de aceptación**: cuáles hay que modificar o crear (por nombre `NNN-RFn:`).
 - **review.md** y **security.md**: si existen, quedan invalidados.
+- **clarify.md**: el cambio necesita una nueva ronda de revisión de spec (se agrega debajo).
 - **Acceso y seguridad**: si el cambio añade acciones, rutas o entradas, actualiza esa
   sección de la spec con sus RF de acceso.
 
