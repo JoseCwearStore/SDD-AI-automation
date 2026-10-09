@@ -36,11 +36,18 @@ arquitectura y verificación de tipos (los que el proyecto defina). La tarea est
 - se cumple el "Hecho cuando" de la tarea.
 
 ## 5. Cerrar
-Marca la tarea como hecha en `tasks.md` y PARA. No empieces la siguiente.
+Marca la tarea como hecha en `tasks.md` SOLO si verificaste TODOS sus criterios de "Hecho
+cuando". Si alguno no se pudo verificar (ej. falta un permiso o el entorno), NO la marques:
+déjala sin marcar con una línea `⚠️ Pendiente de verificación: <criterio> — <por qué>` y
+devuelve PREGUNTAS. En tu respuesta, propone un mensaje de commit convencional para la tarea
+(el commit lo hace el usuario). PARA: no empieces la siguiente.
 
 ## Reglas
 - Solo la tarea indicada. Si necesitas tocar algo que el plan no menciona, PARA y devuelve
-  PREGUNTAS: no lo resuelvas por tu cuenta.
+  PREGUNTAS: no lo resuelvas por tu cuenta. Tampoco adelantes trabajo anotado para otra
+  spec, aunque sea pequeño.
+- Si necesitas un comando que no está en tu lista permitida ni en "Comandos con permiso" de
+  la tarea, explica para qué antes de pedirlo. Nunca renombres carpetas.
 - Si la tarea está marcada con ⚠️, el cambio necesita la aprobación del usuario: si se
   deniega, devuelve BLOQUEADO.
 - Si un test de aceptación parece incorrecto, NO lo toques: devuelve BLOQUEADO explicando

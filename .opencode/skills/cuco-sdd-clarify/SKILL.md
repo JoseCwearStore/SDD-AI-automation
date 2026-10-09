@@ -33,7 +33,8 @@ otros). No reabras lo que ya quedó resuelto.
    tiene finalidad; las pantallas nuevas dicen lo que exigen.
 8. **Aislamiento de tests**: si los criterios usan recursos externos (base de datos,
    almacenamiento, colas, correo), la spec garantiza que los tests nunca tocan los reales
-   (configuración propia, sin caer en la de desarrollo, validación y fallo explícito).
+   (configuración propia, sin caer en la de desarrollo, validación y fallo explícito), y
+   que lo validado sea el destino efectivo (sin parámetros que lo cambien).
 
 ## Cómo clasificar cada hallazgo
 Severidad: **bloquea** si deja un RF inverificable, contradictorio o inseguro; **menor** si

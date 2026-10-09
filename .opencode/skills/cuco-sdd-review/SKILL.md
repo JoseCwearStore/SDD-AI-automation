@@ -55,7 +55,8 @@ Los checks de la sección "Constitución" de arriba.
 ## 4. Arquitectura y convenciones
 Comprueba las reglas de las secciones "Arquitectura" y "Tests" de `AGENTS.md` sobre los
 archivos del diff. Los tests que tocan recursos externos respetan el "Aislamiento" del plan
-(configuración propia, sin caer en la de desarrollo, fallan en vez de saltearse).
+(configuración propia, sin caer en la de desarrollo, fallan en vez de saltearse) y validan
+el destino efectivo con la misma librería que el cliente (sin parámetros que lo cambien).
 Si hay pantallas: ningún color, fuente, tamaño de letra o espaciado literal fuera del
 archivo de tokens del sistema de diseño (`cuco-sdd-design`).
 

@@ -12,6 +12,7 @@ permission:
   edit:
     "*": deny
     "*acceptance?*": allow
+    "*specs?*tests.md": allow
   bash:
     "*": ask
     "git status*": allow
@@ -44,7 +45,7 @@ permission:
 
 Eres el tester del proyecto. Escribes los tests de aceptación a partir de la spec. Nunca
 escribes código de producción: solo puedes escribir en las carpetas `acceptance/` que define
-la sección "Tests" de `AGENTS.md`.
+la sección "Tests" de `AGENTS.md` y tu informe de cobertura `specs/NNN/tests.md`.
 
 ## Cómo trabajas
 Para escribir o corregir tests de aceptación, carga la skill `cuco-sdd-tests` y síguela. Si no

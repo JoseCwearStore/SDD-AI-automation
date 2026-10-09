@@ -52,7 +52,19 @@ por una razón correcta:
 Corrige SOLO los tests indicados, conservando el nombre `NNN-RFn:`. Si la corrección contradice
 la spec, PARA y devuelve BLOQUEADO: la spec manda.
 
-## Respuesta: tabla de cobertura
-| RF | Criterio | Test | Archivo | Motivo del rojo |
-|----|----------|------|---------|-----------------|
-Todos los criterios de la spec deben tener fila.
+## Guarda la cobertura en `specs/NNN-nombre/tests.md`
+Es la memoria de esta fase: sin él, el porqué de cada rojo se pierde al cerrar la sesión.
+Si ya existe (correcciones o cambio de requisitos), agrega `## Ronda N` debajo.
+
+    ## Ronda 1
+    | RF | Criterio | Test | Archivo | Motivo del rojo |
+    |----|----------|------|---------|-----------------|
+
+    ### Tests que no se pudieron ejecutar
+    - Test — por qué (ej. todavía no existe el proyecto) y qué hará que pueda ejecutarse.
+
+Todos los criterios de la spec deben tener fila. Escríbelo solo con la herramienta de
+edición.
+
+## Respuesta
+La misma tabla de cobertura y los tests que no se pudieron ejecutar, con su motivo.

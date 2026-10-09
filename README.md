@@ -368,7 +368,7 @@ Durante todo el flujo, el coordinador:
 |--------|-----|----------------|
 | `coordinator` | Dirige el flujo y es el único que habla contigo | Nada |
 | `planner` | Visión, specs, plan, tareas, archivos de gobierno, diseño y borradores legales | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md`, `docs/design/*.md`, `docs/legal/*.md` |
-| `tester` | Tests de aceptación | Solo carpetas `acceptance/` |
+| `tester` | Tests de aceptación | Solo carpetas `acceptance/` y su informe `specs/**/tests.md` |
 | `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/`, `docs/design/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
 | `reviewer` | Revisa la spec, el código, la seguridad y el cumplimiento | Solo sus informes: `clarify.md`, `review.md`, `security.md`, `compliance.md` y `docs/release/release.md` |
 
@@ -383,11 +383,20 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
   uno mismo`). El prefijo de spec evita choques entre specs.
 - **Constitución**: cada principio se verifica con `Verificar [auto]` (lo comprueba el
   reviewer) y/o `Verificar [manual]` (te lo lista a ti: el reviewer nunca lo da por hecho).
-- **Specs**: `specs/NNN-nombre/` con `spec.md`, `clarify.md`, `plan.md`, `tasks.md`,
+- **Specs**: `specs/NNN-nombre/` con `spec.md`, `clarify.md`, `plan.md`, `tasks.md`, `tests.md`,
   `review.md`, `security.md` y `compliance.md`. Los informes de revisión se escriben por rondas
   (`## Ronda N`) y nunca se borran: son la memoria que permite retomar con `/sdd-continue`.
 - **Skills = CÓMO · AGENTS.md y constitución = QUÉ · agentes = QUIÉN.** Las skills no nombran
   módulos ni comandos concretos: los leen de `AGENTS.md`.
+
+## Nombres de carpetas
+
+El kit no impone nombres: el bootstrap te propone `client/` + `server/`, `apps/web` +
+`apps/api` o `frontend/` + `backend/`, con sus ventajas, y recomienda una según el proyecto.
+En un proyecto existente se respetan los nombres que haya (aunque no sigan ninguna
+convención, como `backend/` y `maimenu/`): quedan en un **mapa de carpetas** de `AGENTS.md`
+con su rol real, para que todas las fases los entiendan. Renombrar una carpeta es siempre una
+**spec propia de refactor**, con análisis de impacto; ningún agente lo hace de paso.
 
 ## Estructura del repositorio
 

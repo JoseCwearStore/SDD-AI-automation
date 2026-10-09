@@ -18,6 +18,9 @@ Genera `specs/NNN-nombre/tasks.md`:
       - RF: RF1, RF2
       - Tests en verde al terminar: tests de aceptación NNN-RF1 y NNN-RF2
       - Hecho cuando: criterio verificable (un comando, un test, un comportamiento observable)
+      - Comandos con permiso: los que el implementer necesitará y no están en su lista
+        permitida (ej. `docker compose build`, `docker pull`), para que el usuario los
+        apruebe de antemano. "Ninguno" si no hay.
     - [ ] **T2** — ⚠️ Título corto (requiere aprobación: cambio en el esquema de datos)
       - ...
 

@@ -20,6 +20,12 @@ su responsabilidad y por qué no encaja en uno existente. Los nombres siguen las
 de `AGENTS.md`.
 
 ## 2. Diseño por capa
+Usa los nombres de carpeta del mapa de `AGENTS.md`; no renombres ni crees carpetas raíz
+nuevas sin indicarlo en "⚠️ Requiere aprobación".
+**Recursos globales**: si el plan levanta servicios que ocupan puertos de la máquina
+(bases de datos, servidores), los puertos son configurables por variable y la primera
+tarea que los levanta comprueba antes que estén libres (otros proyectos del usuario pueden
+usarlos).
 Sigue la arquitectura definida en la sección "Arquitectura" de `AGENTS.md`. Por cada módulo
 afectado y por cada capa definida allí, indica qué se crea o modifica y su responsabilidad.
 Incluye siempre:
@@ -54,6 +60,11 @@ criterios de la spec cubre cada uno.
 colas, correo), su configuración de test propia, que nunca cae en la de desarrollo, y su
 validación (nombre de test + host permitido de una lista explícita). Si no es válida, los
 tests que la usan FALLAN con un mensaje claro: nunca se saltean.
+**Destino efectivo**: la validación interpreta la configuración con la MISMA librería que
+usa el cliente (no con un parser propio) y rechaza los parámetros que cambian el destino
+(ej. en una URL de base de datos, `?host=`, `?port=`, `?user=`, `?dbname=`: muchas
+librerías dejan que pisen lo que dice la URL). Lo que se valida tiene que ser exactamente a
+lo que se conecta.
 
 ## 8. Trazabilidad
 | RF | Capa / componente | Tipo de test |

@@ -80,7 +80,14 @@ Para el resto de decisiones, propón 2 o 3 opciones con sus ventajas y desventaj
 recomienda una según el problema. Si el usuario ya tiene una preferencia, respétala y
 señala sus riesgos.
 - Lenguaje y frameworks (backend, frontend o lo que aplique).
-- Organización de carpetas (monorepo o no) siguiendo la arquitectura elegida.
+- Organización de carpetas (monorepo o no) siguiendo la arquitectura elegida, y **cómo se
+  llaman las carpetas de cada aplicación**. No hay una convención única: propón estas y
+  recomienda una según el proyecto:
+  - `client/` + `server/`: describe el rol; intuitiva para una web con su API.
+  - `apps/web` + `apps/api` (y `apps/mobile`, `apps/admin`…): describe el producto; escala
+    cuando hay o habrá varias aplicaciones (convención de monorepos como Turborepo o Nx).
+  - `frontend/` + `backend/`: describe la especialidad; clara para equipos separados.
+  La elegida queda en el mapa de carpetas de `AGENTS.md` y la usan todas las fases.
 - Persistencia: tipo de base de datos y herramienta de acceso.
 - Autenticación y autorización, si hay usuarios.
 - Diseño, si hay interfaz: ¿tiene referencias (Figma exportado, plantillas, capturas,
@@ -116,6 +123,12 @@ Con todas las etapas cerradas, genera (solo los que no existían, ver el inventa
    decisiones": no lo inventes.
 5. Si los tests de aceptación no viven en carpetas `acceptance/`, avísalo: los permisos del
    tester dependen de esa convención.
+6. **Nombres de carpetas tal como están**, aunque no sigan ninguna convención (ej.
+   `backend/` y `maimenu/`): documéntalos en el mapa de carpetas de `AGENTS.md` con su rol
+   real ("`maimenu/` = cliente web"), así todas las fases los entienden. Si un nombre
+   confunde, indícalo en "Dudas o decisiones" con dos opciones: dejarlo documentado (sin
+   coste) o renombrarlo en una **spec propia de refactor**, con análisis de impacto
+   (imports, Docker, CI, despliegue, documentación). Nunca renombres nada en el bootstrap.
 No generes visión ni roadmap salvo que el usuario lo pida.
 
 ## Plantilla de `specs/000-vision/vision.md`
@@ -160,6 +173,12 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     Leer `docs/constitution.md`, la spec activa (`specs/NNN-*/`) y `MEMORY.md`.
     ## Arquitectura *
     Hexagonal (salvo que el usuario eligiera otra). Las dependencias apuntan HACIA ADENTRO.
+    Mapa de carpetas (los nombres reales, sean cuales sean):
+    | Carpeta | Rol | Stack |
+    |---------|-----|-------|
+    | `server/` (o `apps/api`, `backend/`, …) | servidor / API | … |
+    | `client/` (o `apps/web`, `frontend/`, …) | cliente web | … |
+    Renombrar una carpeta es una spec propia de refactor: nunca se hace de paso.
     Árbol de carpetas real del backend y del frontend, por módulo, con sus capas:
     - `domain/`: entidades, value objects, reglas y puertos. No importa nada externo.
     - `application/`: casos de uso. Solo importa de `domain/`.
@@ -177,6 +196,8 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - Aislamiento: por cada recurso externo de los tests (base de datos, almacenamiento,
       colas, correo), su configuración de test propia, sin caer en la de desarrollo,
       validada (nombre de test + hosts permitidos) y con fallo explícito si no es válida.
+      La validación usa la misma librería que el cliente y rechaza los parámetros que
+      cambian el destino (ej. `?host=` en una URL de base de datos).
     ## Seguridad *
     Lo concreto de este stack para los controles C1–C10 de `cuco-sdd-security`. Si uno no
     aplica, "No aplica" y por qué.

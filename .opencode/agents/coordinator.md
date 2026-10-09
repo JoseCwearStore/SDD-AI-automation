@@ -120,11 +120,16 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
 4. **Tests de aceptación** → @tester con `cuco-sdd-tests` (y `cuco-sdd-a11y` en modo GUÍA si
    la spec tiene interfaz). Comprueba en su tabla de cobertura
    que cada criterio de la spec tiene un test y que todos están en rojo por la razón correcta.
-   Informa al usuario de los archivos de test creados.
+   Informa al usuario de los archivos de test creados y de los tests que no se pudieron
+   ejecutar (quedan en `specs/NNN/tests.md` con su motivo).
 5. **Implementación** → @implementer con `cuco-sdd-implement` (y, en modo GUÍA,
    `cuco-sdd-security`, `cuco-sdd-privacy` y `cuco-sdd-a11y`), UNA vez por tarea (T1, T2…), en orden. Tras cada tarea, informa de los archivos tocados y revisa la salida de comandos de
    su respuesta. Si algo está en rojo (salvo tests de aceptación de tareas aún pendientes),
-   PARA y avisa. Si la tarea tiene ⚠️, recuérdale al usuario que OpenCode le pedirá permiso.
+   PARA y avisa. Antes de cada tarea, muéstrale al usuario sus "Comandos con permiso" y los
+   ⚠️: OpenCode se los pedirá. Al terminar cada tarea, muestra el mensaje de commit que
+   propone @implementer y recomienda commitear antes de la siguiente (un commit por tarea
+   permite volver atrás con precisión). Si devuelve una tarea "Pendiente de verificación",
+   explícale al usuario qué falta y cómo resolverlo antes de seguir.
 6. **Revisión de código** → @reviewer con `cuco-sdd-review`. @reviewer escribe su veredicto
    en `review.md`. Muestra al usuario los checks `[manual]` de la constitución que quedan a
    su cargo.

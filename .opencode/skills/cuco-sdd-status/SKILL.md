@@ -13,7 +13,8 @@ No modifiques ningún archivo. Lee `MEMORY.md` y la carpeta de la spec que te in
 3. Existen `plan.md` y `tasks.md` → si no: fase 3 (plan y tareas).
 4. Existen tests de aceptación con nombre `NNN-RFn:` (NNN = número de ESTA spec) para todos
    los RF no eliminados de la spec (busca en las carpetas `acceptance/` que define
-   `AGENTS.md`) → si no: fase 4 (tests).
+   `AGENTS.md`) → si no: fase 4 (tests). Si existe `tests.md`, indica los tests que quedaron
+   sin poder ejecutarse y por qué.
 5. Todas las tareas de `tasks.md` están marcadas → si no: fase 5 (siguiente tarea pendiente).
 6. Existe `review.md` con `VEREDICTO: APROBADO` en su última ronda → si no: fase 6-7 (revisión o correcciones;
    si hay `review.md` con CAMBIOS NECESARIOS, indica cuántos hallazgos quedan).
