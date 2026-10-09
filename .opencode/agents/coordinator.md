@@ -177,9 +177,12 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
 
 ## Cambios de requisitos (/sdd-change)
 @planner con `cuco-sdd-change`. Muestra al usuario el diff "Antes / Después" y el impacto.
+Después, una ronda de @reviewer con `cuco-sdd-clarify` sobre los RF cambiados (se agrega a
+`clarify.md`), como en la fase 2: un cambio también puede abrir ambigüedades o agujeros.
 🔎 `spec.md`. Con el "sí": @planner marca la spec como aprobada y actualiza el plan
 (`cuco-sdd-plan`) y las tareas (`cuco-sdd-tasks`) → 🔎 `plan.md` y `tasks.md` → @tester
-ajusta los tests de los RF afectados → @implementer ejecuta las tareas nuevas → @reviewer
+ajusta los tests de los RF afectados → @implementer ejecuta las tareas nuevas (si una debe ir antes de tareas pendientes,
+`tasks.md` lo dice explícitamente: el orden de ejecución manda sobre el número) → @reviewer
 revisa → 🔒 auditoría de seguridad (fase 8) → 📋 cumplimiento (fase 9).
 
 ## Diseño (/sdd-design)
