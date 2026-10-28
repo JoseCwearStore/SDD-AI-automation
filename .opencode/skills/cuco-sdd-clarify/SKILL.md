@@ -25,7 +25,10 @@ otros). No reabras lo que ya quedó resuelto.
    concretos.
 5. **Forma** (plantilla de `cuco-sdd-spec`): "Estado: borrador", RF en EARS, un comportamiento
    por RF, sección "Fuera de alcance", y nada de stack, capas, endpoints ni archivos (salvo
-   que el Contexto la declare "Spec de infraestructura").
+   que el Contexto la declare "Spec de infraestructura"). Más de 12 RF activos es un hallazgo
+   "bloquea" con Resuelve: usuario (partir la spec). Cada `[manual]` tiene pasos
+   exactos y de verdad no se puede automatizar; cada `[diferido: NNN]` apunta a una spec que
+   existe en el roadmap y dice por qué no puede verificarse aquí.
 6. **Acceso y seguridad**: la sección existe; cada acción nueva dice quién puede hacerla;
    lo que no dice "público" es privado y tiene su RF de rechazo (no autenticado, sin
    permiso, recurso ajeno); las entradas externas tienen límites concretos.
@@ -50,9 +53,11 @@ Nunca resuelvas un hallazgo de "Decide el usuario" suponiendo la respuesta.
 ## Guarda los hallazgos en `specs/NNN-nombre/clarify.md`
 Es la memoria de esta revisión: sin él, el detalle se pierde al cerrar la sesión. Si ya
 existe, agrega `## Ronda N` debajo de la anterior: no borres el historial. Numera los
-hallazgos con el número de ronda (H2.1, H2.2…) para poder citarlos sin ambigüedad.
+hallazgos con el número de ronda (H2.1, H2.2…) para poder citarlos sin ambigüedad. Cada
+ronda dice qué versión de la spec revisa (C0 si no tiene `## Cambios`; tras un cambio, solo
+los RF que ese cambio toca y lo que afectan).
 
-    ## Ronda 1
+    ## Ronda 1 · versión C0
     VEREDICTO: SPEC LISTA | SPEC CON PROBLEMAS
 
     ### Hallazgos

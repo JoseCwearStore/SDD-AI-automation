@@ -5,25 +5,48 @@ description: SDD · Informa en qué fase está una spec (o todas) y cuál es el 
 No modifiques ningún archivo. Lee `MEMORY.md` y la carpeta de la spec que te indiquen
 (`specs/NNN-nombre/`). Si no te indican ninguna, revisa todas las de `specs/`.
 
+`specs/000-vision/` no es una spec: no la cuentes (solo informa si la visión no está
+aprobada). `specs/features/` tampoco: lista aparte cada feature sin `Estado: cerrada`, con
+la última sección escrita (mini plan, Revisión, Seguridad o Cumplimiento) y su veredicto,
+como "Features abiertas".
+
+## Antes de deducir
+- **Versión vigente** de la spec: el último `Cn` de su sección `## Cambios`, o C0 si no la
+  tiene. Una ronda o una aprobación solo cuenta si dice esa versión: las de versiones
+  anteriores quedaron invalidadas por un cambio de requisitos. Una ronda o aprobación sin
+  versión (archivos de antes de esta convención) cuenta como C0.
+- **RF que exigen test**: los RF no eliminados de la spec, menos los criterios `[manual]` y
+  los RF `[diferido: NNN]`, más los RF de otras specs marcados `[diferido: <esta spec>]`
+  (búscalos en todas las `spec.md`).
+
 ## Cómo deducir la fase (de la primera que NO se cumple)
 1. Existe `spec.md` → si no: sin spec.
-2. `spec.md` tiene "Estado: aprobada" → si no: fase 1-2 (spec en borrador, pendiente de
-   revisión o de aprobación del usuario). Si existe `clarify.md`, indica el veredicto de su
-   última ronda y cuántos hallazgos siguen abiertos (y de quién: planner o usuario).
-3. Existen `plan.md` y `tasks.md` → si no: fase 3 (plan y tareas).
-4. Existen tests de aceptación con nombre `NNN-RFn:` (NNN = número de ESTA spec) para todos
-   los RF no eliminados de la spec (busca en las carpetas `acceptance/` que define
-   `AGENTS.md`) → si no: fase 4 (tests). Si existe `tests.md`, indica los tests que quedaron
-   sin poder ejecutarse y por qué.
-5. Todas las tareas de `tasks.md` están marcadas → si no: fase 5 (siguiente tarea pendiente).
-6. Existe `review.md` con `VEREDICTO: APROBADO` en su última ronda → si no: fase 6-7 (revisión o correcciones;
-   si hay `review.md` con CAMBIOS NECESARIOS, indica cuántos hallazgos quedan).
-7. Existe `security.md` con `VEREDICTO: SEGURO` en su última ronda → si no: fase 8
-   (auditoría de seguridad pendiente, o hallazgos por corregir: indica cuántos y de quién).
-8. Existe `compliance.md` con `VEREDICTO: CUMPLE` en su última ronda → si no: fase 9
-   (auditoría de cumplimiento pendiente, o hallazgos por corregir).
-9. `MEMORY.md` menciona el cierre de esta spec → si no: fase 10 (cierre pendiente).
-Si se cumplen todas: spec cerrada.
+2. `spec.md` tiene "Estado: aprobada" o "Estado: cerrada" → si no: fase 1-2 (spec en
+   borrador, pendiente de revisión o de aprobación del usuario). Si existe `clarify.md`,
+   indica el veredicto de su última ronda, su versión y cuántos hallazgos siguen abiertos
+   (y de quién: planner o usuario).
+3. `plan.md` y `tasks.md` tienen `Estado: aprobado (versión <vigente>)` → si no: fase 3
+   (plan y tareas por generar, por actualizar tras un cambio o pendientes del 🔎 del usuario).
+4. Existen tests de aceptación cuyo archivo contiene el texto `<spec>-RFn:` (en el nombre o
+   la descripción del test, según el lenguaje) para todos los RF que exigen test
+   (busca en las carpetas `acceptance/` que define `AGENTS.md`) y, si la versión vigente no es
+   C0, la última ronda de `tests.md` es de esa versión → si no: fase 4 (tests). Si existe
+   `tests.md`, indica los tests que quedaron sin poder ejecutarse y por qué.
+5. Todas las tareas de `tasks.md` están marcadas → si no: fase 5. La siguiente tarea es la
+   primera sin marcar de "Orden de ejecución" (no la de número más bajo). Si tiene
+   `⚠️ Pendiente de verificación`, el siguiente paso es resolver eso.
+6. La última ronda de `review.md` es de la versión vigente y dice `VEREDICTO: APROBADO` → si
+   no: fase 6-7 (revisión o correcciones; si dice CAMBIOS NECESARIOS, indica cuántos
+   hallazgos quedan).
+7. Lo mismo con `security.md` y `VEREDICTO: SEGURO` → si no: fase 8 (auditoría pendiente, o
+   hallazgos por corregir: indica cuántos y de quién).
+8. Lo mismo con `compliance.md` y `VEREDICTO: CUMPLE` → si no: fase 9 (auditoría pendiente,
+   o hallazgos por corregir).
+9. `spec.md` tiene "Estado: cerrada" → si no: fase 10 (cierre pendiente).
+Si se cumplen todas: spec cerrada. Indica además sus RF `[diferido: NNN]` y en qué spec
+quedan pendientes.
+Si una spec con "Estado: cerrada" no cumple alguno de los puntos 3-8, es una inconsistencia:
+indícala.
 
 ## Respuesta (máximo 8 líneas por spec)
 - Spec y fase actual.

@@ -14,7 +14,14 @@ versión, o si contradice `AGENTS.md`/constitution: NO supongas. Devuelve Estado
 con una lista numerada de máximo 5 preguntas, ordenadas de la más a la menos importante.
 El coordinador se las hará al usuario de una en una.
 
-## Paso 2: escribir la spec
+## Paso 2: comprobar el tamaño
+Una spec tiene como máximo **12 RF** (lo ideal, ~10), contando los de "Acceso y seguridad".
+Si la petición necesita más, NO escribas la spec: devuelve BLOQUEADO con una propuesta de
+partición en specs más pequeñas (qué RF va en cada una y en qué orden), para que el usuario
+elija. Una spec grande no se revisa bien: cada ronda de revisión encuentra cosas nuevas y
+nunca converge. Las specs de infraestructura también cuentan.
+
+## Paso 3: escribir la spec
 Con las respuestas, crea `specs/NNN-nombre/spec.md`:
 - NNN = siguiente número libre en `specs/`, con 3 dígitos.
 - nombre = 2 a 4 palabras en kebab-case que describan el cambio (ej. `001-registro-usuarios`).
@@ -37,6 +44,12 @@ Plantilla:
     ## Criterios de aceptación
     Por cada RF, al menos uno:
     - RF1 — Dado …, Cuando …, Entonces … (con valores concretos: ej. username "ab")
+    Marcas (solo si hacen falta, justo después del número):
+    - `[manual]`: el criterio solo lo puede comprobar una persona (ej. borrar un volumen,
+      revisar en el navegador). No lleva test automático: lleva pasos exactos.
+    - `[diferido: NNN]`: el RF solo se puede implementar o verificar cuando exista la spec
+      NNN (debe estar en el roadmap). Lo implementa y prueba la spec NNN, con su nombre
+      original (ej. `001-RF6`).
 
     ## Casos límite
     Los que pueden romper las reglas de dominio de `AGENTS.md`.
@@ -61,6 +74,12 @@ Plantilla:
     ## Fuera de alcance
     Lo que explícitamente NO se hace en esta versión.
 
+## Estados de la spec
+`Estado: borrador` → `Estado: aprobada` (con el "sí" del usuario) → `Estado: cerrada` (en el
+cierre). Solo el planner los cambia, y solo cuando el coordinador le dice que el usuario
+aprobó. Un cambio de requisitos (`cuco-sdd-change`) la devuelve a borrador y añade una
+sección `## Cambios` al final.
+
 ## Reglas
 - Solo el QUÉ y el POR QUÉ: nada de stack, capas, endpoints ni nombres de archivos.
   Excepción: en una spec de infraestructura (ej. la base técnica), lo que se pide ES que
@@ -71,3 +90,5 @@ Plantilla:
 - Un RF por comportamiento: si un RF tiene un "y", probablemente son dos.
 - No repitas como RF las verificaciones de `docs/constitution.md`: el reviewer las ejecuta
   en cada revisión de código, en todas las specs. Una spec solo pide lo propio del cambio.
+- Usa `[diferido: NNN]` solo si es inevitable: si muchos RF dependen de otra spec, la
+  división del roadmap está mal; dilo en "Dudas o decisiones".

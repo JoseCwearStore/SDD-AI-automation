@@ -4,4 +4,4 @@ agent: coordinator
 ---
 Revisión de producto solicitada por el usuario: $ARGUMENTS
 
-Sigue tu sección "Release (/sdd-release)".
+Carga la skill `cuco-sdd-flow-release` y síguela.

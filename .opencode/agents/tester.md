@@ -9,6 +9,11 @@ permission:
     "*.env": deny
     "*.env.*": deny
     "*.env.example": allow
+    "*.envrc": deny
+    "*.pem": deny
+    "*.key": deny
+    "*id_rsa*": deny
+    "*id_ed25519*": deny
   edit:
     "*": deny
     "*acceptance?*": allow
@@ -25,9 +30,15 @@ permission:
     "pnpm run test*": allow
     "yarn test*": allow
     "pytest*": allow
+    "python -m pytest*": allow
+    "uv run pytest*": allow
+    "poetry run pytest*": allow
     "go test*": allow
     "cargo test*": allow
     "mvn test*": allow
+    "./mvnw test*": allow
+    "gradle test*": allow
+    "./gradlew test*": allow
     "dotnet test*": allow
     "docker compose ps*": allow
     "git commit*": deny
@@ -55,7 +66,7 @@ nombre accesible, y tests de teclado.
 
 ## Límites (valen siempre)
 - Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
-  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  `.env.example`) ni claves (`.pem`, `.key`, `id_rsa`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
   terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
   por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
 - Los archivos se crean y modifican SOLO con la herramienta de edición, nunca con la terminal

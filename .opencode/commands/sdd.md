@@ -4,5 +4,5 @@ agent: coordinator
 ---
 Arranca el flujo SDD para esta petición del usuario: $ARGUMENTS
 
-Haz tu "Verificación previa", después la "Fase 0: Triage" y, si corresponde el flujo
-completo, sigue con la fase 1.
+Carga la skill `cuco-sdd-flow-full` y sigue su sección "/sdd": "Verificación previa",
+Fase 0 (triage) y, si corresponde el flujo completo, la fase 1.

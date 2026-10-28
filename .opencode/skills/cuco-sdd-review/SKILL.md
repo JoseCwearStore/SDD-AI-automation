@@ -17,27 +17,45 @@ una referencia al control.
 - Si un `Verificar` no tiene marca, trátalo como `[manual]` y añade un hallazgo "Opcional"
   pidiendo marcarlo.
 
+## El diff que se revisa (vale en los dos modos)
+El usuario puede commitear después de cada tarea: `git diff` a secas no basta. Usa la base
+(`Base:` de `tasks.md`, o la que te pasa el coordinador en modo feature):
+- `git diff <base>`: todo lo cambiado desde la base, commiteado o no.
+- `git status --porcelain -uall`: los archivos nuevos sin seguimiento uno por uno (sin
+  `-uall`, una carpeta nueva aparece como una sola línea). Léelos completos: `git diff` no
+  los muestra.
+- Con `Base: sin commits`, todo el repositorio es nuevo: revisa los archivos de
+  `git status --porcelain -uall`.
+Si no hay base, devuelve BLOQUEADO pidiéndola: no revises a ciegas.
+
 ## Modo feature (cambio pequeño, sin spec)
-Si el coordinador te pasa un mini plan aprobado en lugar de una spec: no busques `spec.md`,
-`plan.md`, `tasks.md` ni `review.md`, y no escribas `review.md`. Haz solo esto:
-1. Compara el diff (`git diff`, `git status`) con el mini plan: un archivo o comportamiento
-   fuera del mini plan es un hallazgo.
+Si el coordinador te pasa el archivo de una feature (`specs/features/…md`, con su mini plan
+aprobado) en lugar de una spec: no busques `spec.md`, `plan.md`, `tasks.md` ni `review.md`.
+Haz solo esto:
+1. Compara el diff con el mini plan (ver "El diff que se revisa"; la base te la pasa el
+   coordinador): un archivo o comportamiento fuera del mini plan es un hallazgo.
 2. Los checks de la constitución (sección anterior).
 3. Comprueba las reglas de "Arquitectura" y "Tests" de `AGENTS.md` sobre los archivos del diff.
-Devuelve el VEREDICTO, los hallazgos y los checks manuales en tu respuesta. El resto de esta
-skill no aplica.
+Agrega al final del archivo de la feature `## Revisión · Ronda N · Base <hash>` con el
+VEREDICTO, los hallazgos y los checks manuales (mismo formato que `review.md`, sin tocar lo
+que hay arriba), y devuélvelos también en tu respuesta. El resto de esta skill no aplica.
 
 ## Modo spec (flujo SDD completo)
 Lee `docs/constitution.md`, `AGENTS.md`, `MEMORY.md` y de `specs/NNN-nombre/`: `spec.md`,
 `plan.md`, `tasks.md` y `review.md` (si existe). La ruta te la pasa el coordinador.
-Revisa los cambios con `git diff` y `git status`.
+Revisa los cambios desde la `Base:` de `tasks.md` (ver "El diff que se revisa").
 
-## 0. Si existe un `review.md` anterior (ronda 2)
+## 0. Si existe un `review.md` anterior (ronda 2 o más)
 Primero verifica UNO POR UNO los hallazgos de la ronda anterior: resuelto o no resuelto.
 Después revisa solo lo que cambió desde entonces. No reabras lo que ya estaba aprobado.
+Excepción: si la última ronda es de una versión anterior de la spec (hubo un cambio de
+requisitos), revisa todo de nuevo contra la versión vigente.
 
 ## 1. Tareas
 Todas marcadas en `tasks.md` y con su "Hecho cuando" cumplido. Si falta una: hallazgo.
+Cada `⚠️ Verificación delegada: … → reviewer` la compruebas tú (si no puedes, es hallazgo);
+cada `→ usuario` va a "Checks manuales". Un criterio sin verificar en una tarea marcada sin
+esa línea es un hallazgo.
 
 ## 2. Requisitos, RF por RF
 Ejecuta el comando de tests de la sección "Comandos" de `AGENTS.md`. Si el entorno de tests no
@@ -46,6 +64,9 @@ Por cada criterio de la spec, comprueba:
 - Qué test lo cubre (nombre `NNN-RFn:`) y si pasa.
 - Si lo prueba DE VERDAD: los mismos valores de la spec, y asserts sobre el "Entonces"
   (no tests sin asserts, ni `expect(true)`, ni asserts que no dependen del código).
+- Los `[manual]` van a "Checks manuales" con sus pasos; los `[diferido: NNN]` se anotan como
+  "Diferido a NNN" (no son hallazgo). Los de otras specs `[diferido: <esta spec>]` se
+  revisan aquí como uno más.
 Los RF de interfaz: si tienes una herramienta de navegador disponible, úsala (flujo, consola
 y vista móvil). Si no, añádelos a "Checks manuales" con los pasos exactos a comprobar.
 
@@ -72,9 +93,9 @@ hallazgo. No hay "mejoras" fuera del plan.
 
 ## 6. Guarda el veredicto en `specs/NNN-nombre/review.md`
 Si ya existe, agrega una sección nueva `## Ronda N` debajo de la anterior: no borres el
-historial.
+historial. Cada ronda dice qué versión de la spec cubre (C0 si no tiene `## Cambios`).
 
-    ## Ronda 1
+    ## Ronda 1 · versión C0
     VEREDICTO: APROBADO | CAMBIOS NECESARIOS
 
     | RF | Criterio | Test | Resultado | ¿Lo prueba de verdad? |
@@ -90,7 +111,7 @@ historial.
     ### Checks manuales (a cargo del usuario)
     - [ ] Principio N / RFn — qué comprobar y cómo.
 
-    ### Ronda anterior (solo en la ronda 2)
+    ### Ronda anterior (solo desde la ronda 2)
     - Hallazgo 1: resuelto | no resuelto
 
 En tu respuesta, la primera línea es el mismo VEREDICTO.

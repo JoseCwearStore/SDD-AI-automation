@@ -24,7 +24,7 @@ coordinador. Si el proyecto no tiene interfaz de usuario, dilo y termina: no hac
 - Para analizar imágenes hace falta un modelo con visión. Si no puedes ver una imagen de
   `references/`, dilo: no inventes lo que contiene.
 
-## Modo CREAR (planner, con `/sdd-design` o desde el bootstrap)
+## Modo CREAR (planner, con `/sdd-design`)
 1. **Con referencias** en `docs/design/references/` (capturas o frames exportados de Figma en
    PNG/JPG, variables o estilos exportados en JSON, plantillas HTML/CSS, manual de marca en
    PDF): extrae la paleta, la tipografía y, si se ven, espaciados y radios. Cada valor lleva

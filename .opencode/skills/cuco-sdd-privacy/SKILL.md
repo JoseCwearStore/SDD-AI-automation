@@ -81,7 +81,8 @@ garantiza el usuario.
 ## Modo AUDITORÍA (fase de cumplimiento de cada spec)
 Lo usa el reviewer después de la auditoría de seguridad. Solo detectas.
 1. Lee la spec (secciones "Datos personales" y "Accesibilidad"), el plan ("Cumplimiento") y
-   el diff. En modo feature, el mini plan.
+   el diff contra la base, como en `cuco-sdd-review` ("El diff que se revisa"). En modo
+   feature, el mini plan.
 2. Para cada control P1–P12: **CUMPLE** (evidencia), **NO CUMPLE** (hallazgo), **NO APLICA**
    (por qué) o **MANUAL** / **👤 USUARIO** (lo que solo puede hacer o decidir el usuario,
    con los pasos exactos).
@@ -92,10 +93,12 @@ Lo usa el reviewer después de la auditoría de seguridad. Solo detectas.
 4. Cada hallazgo lleva **Responsable**: planner, tester o implementer.
 5. Carga también `cuco-sdd-a11y` en modo AUDITORÍA para la sección de accesibilidad.
 
-Guarda el resultado en `specs/NNN-nombre/compliance.md` (en modo feature, en tu respuesta).
-Si ya existe, agrega `## Ronda N` debajo y verifica primero los hallazgos anteriores.
+Guarda el resultado en `specs/NNN-nombre/compliance.md` (en modo feature, como
+`## Cumplimiento · Ronda N` al final del archivo de la feature, sin tocar lo que hay arriba).
+Si ya existe, agrega `## Ronda N` debajo y verifica primero los hallazgos anteriores. Cada
+ronda dice qué versión de la spec cubre (C0 si no tiene `## Cambios`).
 
-    ## Ronda 1
+    ## Ronda 1 · versión C0
     VEREDICTO: CUMPLE | CAMBIOS NECESARIOS
 
     ### Privacidad

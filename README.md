@@ -103,7 +103,7 @@ formas de instalar OpenCode (Scoop, Chocolatey, Arch…): [opencode.ai/docs](htt
 
 ### 2. Descarga el kit
 
-En cualquier carpeta:
+En la carpeta donde guardas tus proyectos (ej. `Documentos/`):
 
 ```bash
 git clone https://github.com/JoseCwearStore/SDD-AI-automation.git
@@ -111,19 +111,27 @@ git clone https://github.com/JoseCwearStore/SDD-AI-automation.git
 
 ### 3. Crea tu proyecto (o usa uno existente)
 
+En esa misma carpeta, al lado del kit:
+
 ```bash
 mkdir mi-proyecto
 cd mi-proyecto
 git init
+cd ..
 ```
+
+Queda así: `Documentos/SDD-AI-automation/` y `Documentos/mi-proyecto/`.
 
 ### 4. Instala el kit en tu proyecto
 
-Desde la carpeta del kit:
+Entra en la carpeta del kit y ejecuta el instalador apuntando a tu proyecto:
 
 ```bash
+cd SDD-AI-automation
 node scripts/install.mjs ../mi-proyecto --prefix gym
 ```
+
+Si tu proyecto está en otro sitio, pasa su ruta completa en lugar de `../mi-proyecto`.
 
 - `--prefix gym` deja las skills como `gym-sdd-*` ([por qué](#personalizar-el-prefijo-de-las-skills)).
   Si no lo indicas, se usa el del kit (`cuco`).
@@ -131,19 +139,52 @@ node scripts/install.mjs ../mi-proyecto --prefix gym
 - Copia `.opencode/agents`, `.opencode/commands` y `.opencode/skills`, y crea o completa
   `opencode.json` con `"default_agent": "coordinator"`.
 - **Nunca toca** `AGENTS.md`, `MEMORY.md`, `docs/` ni `specs/`: son de tu proyecto.
-- No borra nada: si tienes skills propias con tu prefijo, se conservan.
+- Anota lo que instaló en `.opencode/sdd-kit.json`. Al actualizar, borra solo los archivos
+  que instaló una versión anterior del kit y que el kit ya no tiene: tus skills propias,
+  aunque usen tu prefijo, se conservan.
+- Si tu proyecto usa `opencode.jsonc`, no lo edita (perdería tus comentarios): te pide que
+  añadas `"default_agent": "coordinator"` a mano.
 
 ### 5. Arranca
 
-Abre OpenCode en la carpeta de tu proyecto (`cd mi-proyecto` y `opencode`), comprueba que
-aparecen los agentes al escribir `@` (`coordinator`, `planner`, `tester`, `implementer`,
-`reviewer`) y empieza con tu idea:
+1. Si es la primera vez que usas OpenCode, conecta tu proveedor con su API key
+   (`opencode auth login`) y, ya dentro de OpenCode, elige el modelo con `/models`. Recuerda:
+   tiene que soportar subagentes (ver Requisitos).
+2. Abre OpenCode en la carpeta de tu proyecto (`cd ../mi-proyecto` y `opencode`). Si ya
+   estaba abierto, reinícialo para que cargue los agentes.
+3. Comprueba que aparecen los agentes al escribir `@` (`coordinator`, `planner`, `tester`,
+   `implementer`, `reviewer`) y que el agente activo es `coordinator`.
+4. Haz la prueba de permisos del paso 6 (5 minutos; solo la primera vez y tras cada
+   actualización del kit).
+5. Empieza con tu idea:
 
 ```
 /sdd-bootstrap Una app para … (describe lo que quieres construir)
 ```
 
-Si OpenCode ya estaba abierto, reinícialo para que cargue los agentes.
+### 6. Prueba los permisos
+
+Un permiso que no probaste no está verificado. Crea un `.env` de prueba con
+`SECRETO=prueba` y pide a cada agente, escribiendo `@agente` y la instrucción:
+
+| Agente | Instrucción | Resultado esperado |
+|--------|-------------|--------------------|
+| `@planner` | crea `specs/999-prueba/nota.md` con el texto hola | Lo crea |
+| `@planner` | crea `src/prueba.txt` con el texto hola | Lo rechaza |
+| `@tester` | crea `tests/acceptance/prueba.txt` con el texto hola | Lo crea |
+| `@tester` | añade una línea al final de `AGENTS.md` | Lo rechaza |
+| `@implementer` | crea `src/prueba.txt` con el texto hola | Lo crea |
+| `@implementer` | añade una línea a `opencode.json` | Lo rechaza |
+| `@implementer` | edita `specs/999-prueba/nota.md` | Lo rechaza |
+| `@implementer` | ejecuta `git status` | Lo ejecuta sin preguntar |
+| `@implementer` | ejecuta `git commit -m prueba` | Lo rechaza |
+| `@implementer` | ejecuta `git status > prueba-redir.txt` | **Te pregunta** (si lo ejecuta sin preguntar, avisa: ver "Problemas conocidos") |
+| `@reviewer` | crea `specs/999-prueba/review.md` con el texto hola | Lo crea |
+| `@reviewer` | crea `src/prueba.txt` con el texto hola | Lo rechaza |
+| `@reviewer` | lee el archivo `.env` | Lo rechaza |
+
+Al terminar, borra a mano `.env`, `specs/999-prueba/`, `src/prueba.txt`,
+`tests/acceptance/prueba.txt` y `prueba-redir.txt` si se creó.
 
 ### Actualizar el kit en un proyecto
 
@@ -151,10 +192,32 @@ Haz `git pull` en el kit y vuelve a ejecutar el mismo comando, sin `--prefix`: d
 prefijo que ya usa tu proyecto y solo reescribe los archivos que cambiaron. Con el kit
 como única fuente de verdad, todos tus proyectos se actualizan igual.
 
+### Ajustes por proyecto (`.opencode/sdd.local.json`)
+
+No edites los agentes en tu proyecto: la siguiente actualización los pisa. Si tu stack
+necesita permisos propios (ej. permitir `uv run ruff` o `make test`), créalos en
+`.opencode/sdd.local.json` y vuelve a ejecutar el instalador:
+
+```json
+{
+  "implementer": {
+    "bash": { "uv run ruff*": "allow", "make test*": "allow" },
+    "edit": { "*Makefile": "ask" }
+  },
+  "tester": { "bash": { "make test*": "allow" } }
+}
+```
+
+El instalador añade esas reglas **al final** de cada permiso del agente, así que ganan a las
+del kit (gana la última regla que coincide). Cuidado: también pueden abrir lo que el kit
+protege (ej. `"*specs?*": "allow"` en el implementer); el instalador te lista lo que aplicó.
+Las claves que empiezan por `$` se ignoran (sirven de comentario).
+
 ### Sin Node
 
 Copia a mano la carpeta `.opencode/` y `opencode.json` en la raíz de tu proyecto (si ya
-tienes un `opencode.json`, añade solo `"default_agent": "coordinator"`).
+tienes un `opencode.json`, añade solo `"default_agent": "coordinator"`). Sin el instalador no
+se aplican los ajustes de `sdd.local.json` ni se borran los archivos que el kit quitó.
 
 macOS y Linux:
 
@@ -200,7 +263,7 @@ Si ya lo habías renombrado antes, indica el prefijo actual como segundo argumen
 node <ruta-del-kit>/scripts/rename-prefix.mjs shop gym
 ```
 
-El script renombra las 16 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
+El script renombra las 21 carpetas de `.opencode/skills/` y reemplaza el prefijo en todos los
 archivos de `.opencode/` y en `AGENTS.md`. Después, **reinicia OpenCode**.
 
 ### A mano
@@ -224,9 +287,9 @@ skills y devuelven BLOQUEADO. Tienes que cambiar:
 | Comando | Para qué |
 |---------|----------|
 | `/sdd-bootstrap <idea>` | Prepara el proyecto: entrevista, visión, roadmap, `AGENTS.md`, `MEMORY.md` y constitución. |
-| `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión → seguridad. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
+| `/sdd <petición>` | Flujo completo: spec → plan → tests → código → revisión → seguridad → cumplimiento. Si el cambio es pequeño, te recomienda `/sdd-feature`. |
 | `/sdd-continue <NNN> [indicaciones]` | Retoma una spec existente desde la fase en que quedó (la detecta solo). Nunca crea una spec nueva. |
-| `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión → seguridad. |
+| `/sdd-feature <petición>` | Cambio pequeño sin spec: mini plan → TDD → revisión → seguridad → cumplimiento. |
 | `/sdd-design [indicaciones]` | Crea o actualiza el sistema de diseño (paleta, tipografía) desde cero o desde `docs/design/references/`. Obligatorio antes de la primera spec con pantallas. |
 | `/sdd-release [notas]` | Con el producto listo: borradores legales desde el código, revisión de punta a punta y la lista de lo que es tuyo. |
 | `/sdd-change <NNN-spec> <cambio>` | Cambia los requisitos de una spec existente, con análisis de impacto. |
@@ -369,12 +432,16 @@ Durante todo el flujo, el coordinador:
 | `coordinator` | Dirige el flujo y es el único que habla contigo | Nada |
 | `planner` | Visión, specs, plan, tareas, archivos de gobierno, diseño y borradores legales | `specs/**/*.md`, `AGENTS.md`, `MEMORY.md`, `docs/constitution.md`, `docs/design/*.md`, `docs/legal/*.md` |
 | `tester` | Tests de aceptación | Solo carpetas `acceptance/` y su informe `specs/**/tests.md` |
-| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `AGENTS.md`, la constitución, las specs (excepto marcar `tasks.md`), `acceptance/`, `docs/design/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones y Docker |
-| `reviewer` | Revisa la spec, el código, la seguridad y el cumplimiento | Solo sus informes: `clarify.md`, `review.md`, `security.md`, `compliance.md` y `docs/release/release.md` |
+| `implementer` | Código con TDD | Todo, salvo `.opencode/`, `opencode.json`, `AGENTS.md`, la constitución, las specs (excepto marcar tareas y anotar la `Base:` en `tasks.md`), `acceptance/`, `docs/design/`, `docs/legal/`, `docs/release/` y los `.env`. **Pide permiso** para manifiestos de dependencias, esquema, migraciones, Docker, CI (`.github/`, `.gitlab-ci.yml`) y Terraform |
+| `reviewer` | Revisa la spec, el código, la seguridad y el cumplimiento | Solo sus informes: `clarify.md`, `review.md`, `security.md`, `compliance.md`, `docs/release/release.md` y sus rondas en `specs/features/*.md` |
 
-Ningún agente puede **leer** los `.env` (salvo `.env.example`), así un secreto nunca termina
-en el chat. Ningún agente puede hacer `git commit`, `git push` ni borrados recursivos. Los comandos de
-tests, tipos y lint de los stacks más comunes están permitidos; el resto pide confirmación.
+Ningún agente puede **leer** los `.env` (salvo `.env.example`), `.envrc` ni claves (`.pem`,
+`.key`, `id_rsa`, `id_ed25519`), así un secreto nunca termina en el chat. Ningún agente puede hacer `git commit` ni `git push`. Al implementer se le
+deniegan además `rm -rf`, `git reset --hard`, `git clean` y `docker compose down -v`, y al
+tester y al reviewer cualquier `rm`; cualquier otro
+borrado (`rm -r`, `Remove-Item`…) **te pide confirmación**: recházalo si no lo esperabas. Los
+comandos de tests, tipos y lint de los stacks más comunes están permitidos; el resto pide
+confirmación.
 
 ## Convenciones del kit
 
@@ -385,9 +452,29 @@ tests, tipos y lint de los stacks más comunes están permitidos; el resto pide 
   reviewer) y/o `Verificar [manual]` (te lo lista a ti: el reviewer nunca lo da por hecho).
 - **Specs**: `specs/NNN-nombre/` con `spec.md`, `clarify.md`, `plan.md`, `tasks.md`, `tests.md`,
   `review.md`, `security.md` y `compliance.md`. Los informes de revisión se escriben por rondas
-  (`## Ronda N`) y nunca se borran: son la memoria que permite retomar con `/sdd-continue`.
+  (`## Ronda N · versión Cn`) y nunca se borran: son la memoria que permite retomar con
+  `/sdd-continue`.
+- **Estados**: la spec pasa de `borrador` a `aprobada` y a `cerrada`; `plan.md` y `tasks.md`
+  llevan `Estado: aprobado (versión Cn)` tras tu 🔎. `/sdd-status` deduce la fase solo de
+  estas marcas y de los veredictos, así que nunca se saltea una aprobación al retomar.
+- **Versiones**: cada `/sdd-change` agrega `C1`, `C2`… en la sección `## Cambios` de la spec
+  (sin cambios, la versión es C0). Plan, tareas, tests e informes dicen qué versión cubren:
+  lo de una versión anterior deja de contar y esas fases se repiten.
+- **Marcas de criterios**: `[manual]` (lo comprueba una persona, con pasos exactos; sin test)
+  y `[diferido: NNN]` (el RF depende de otra spec del roadmap, que lo implementa y lo prueba
+  con su nombre original).
+- **Tareas**: cada una declara `Depende de`, y `tasks.md` tiene un `Orden de ejecución` que
+  manda sobre el número (una tarea agregada por un cambio puede ir antes que otras).
+- **Base de revisión**: al empezar la primera tarea, el implementer anota en `tasks.md` el
+  commit `Base:`. La revisión y las auditorías comparan contra esa base, así que puedes
+  commitear después de cada tarea sin que el reviewer se quede sin diff.
+- **Features**: cada `/sdd-feature` deja su archivo en `specs/features/AAAA-MM-DD-nombre.md`
+  con el mini plan aprobado y las rondas de revisión, seguridad y cumplimiento. `/sdd-status`
+  lista las que no están cerradas.
 - **Skills = CÓMO · AGENTS.md y constitución = QUÉ · agentes = QUIÉN.** Las skills no nombran
-  módulos ni comandos concretos: los leen de `AGENTS.md`.
+  módulos ni comandos concretos: los leen de `AGENTS.md`. El coordinador solo lleva lo común
+  (transparencia, 🔎, contexto, reglas); los pasos de cada comando viven en las skills
+  `cuco-sdd-flow-*`, que carga según el comando.
 
 ## Nombres de carpetas
 
@@ -404,10 +491,12 @@ con su rol real, para que todas las fases los entiendan. Renombrar una carpeta e
 .opencode/
 ├── agents/      coordinator, planner, tester, implementer, reviewer
 ├── commands/    sdd, sdd-continue, sdd-feature, sdd-change, sdd-design, sdd-release, sdd-bootstrap, sdd-constitution, sdd-status
-└── skills/      cuco-sdd-<fase>/SKILL.md (16 skills: una por fase + seguridad, privacidad, accesibilidad y diseño)
+└── skills/      cuco-sdd-<fase>/SKILL.md (21 skills: una por fase; seguridad, privacidad,
+                 accesibilidad y diseño; y 5 cuco-sdd-flow-* con los pasos de cada comando
+                 para el coordinador)
 opencode.json    default_agent: coordinator
 scripts/
-├── install.mjs        instala o actualiza el kit en un proyecto
+├── install.mjs        instala o actualiza el kit en un proyecto (con sdd.local.json)
 └── rename-prefix.mjs  cambia el prefijo de las skills
 ```
 
@@ -453,8 +542,13 @@ scripts/
   (verificado en una prueba real). Una parte permitida al principio no "contagia" el
   permiso al resto: `git status && echo x > f` pregunta (la segunda parte cae en `ask`) y
   `git status && rm -rf algo` se rechaza solo (la segunda parte está en `deny`).
-- Un permiso que no probaste no está verificado: después de instalar, prueba con cada agente
-  un caso **permitido** y uno **denegado**.
+- **Redirecciones dentro de un comando permitido (sin verificar).** Si OpenCode compara el
+  texto completo del comando, `git status > archivo` coincidiría con la regla permitida
+  `git status*` y escribiría el archivo sin preguntar (lo mismo `git diff --output=…`). La
+  prueba del paso 6 lo comprueba. Si pasa sin preguntar, añade al final del `bash` de cada
+  agente `"*>*": ask` y `"*--output*": ask` (coste: `npm test 2>&1` también preguntará).
+- Un permiso que no probaste no está verificado: después de instalar, haz la prueba del
+  paso 6 (un caso **permitido** y uno **denegado** por agente).
 
 ## Licencia
 

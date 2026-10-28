@@ -7,6 +7,11 @@ permission:
     "*.env": deny
     "*.env.*": deny
     "*.env.example": allow
+    "*.envrc": deny
+    "*.pem": deny
+    "*.key": deny
+    "*id_rsa*": deny
+    "*id_ed25519*": deny
   edit:
     "*": deny
     "*specs?*.md": allow
@@ -28,6 +33,7 @@ permission:
     "cuco-sdd-plan": allow
     "cuco-sdd-tasks": allow
     "cuco-sdd-change": allow
+    "cuco-sdd-feature": allow
     "cuco-sdd-security": allow
     "cuco-sdd-privacy": allow
     "cuco-sdd-a11y": allow
@@ -46,6 +52,8 @@ El coordinador te indica la fase. Carga la skill que corresponde y síguela:
 - Plan → `cuco-sdd-plan`
 - Tareas → `cuco-sdd-tasks`
 - Cambio de requisitos → `cuco-sdd-change`
+- Guardar o cerrar el archivo de una feature (`/sdd-feature`) → `cuco-sdd-feature`, sección
+  "Archivo de la feature"
 - Seguridad (modo GUÍA, junto con la spec y el plan) → `cuco-sdd-security`
 - Privacidad y accesibilidad (modo GUÍA en spec y plan; modo RELEASE para los borradores
   legales de `docs/legal/`) → `cuco-sdd-privacy` y `cuco-sdd-a11y`
@@ -55,7 +63,7 @@ Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento
 
 ## Límites (valen siempre)
 - Nunca leas, busques ni pases a ninguna herramienta los archivos `.env` o `.env.*` (salvo
-  `.env.example`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
+  `.env.example`) ni claves (`.pem`, `.key`, `id_rsa`): ni con `read`, ni con búsqueda de contenido apuntando a ellos, ni con la
   terminal. El permiso `read` los bloquea, pero la búsqueda de contenido no puede bloquearse
   por ruta: depende de ti. Para saber qué variables existen, usa `.env.example`.
 - Nunca escribes código ni tests.
@@ -67,8 +75,10 @@ Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento
   - Si YA existen, NUNCA los sobrescribes por tu cuenta: propones el diff en tu respuesta y
     solo lo aplicas cuando el coordinador te dice que el usuario lo aprobó.
 - No supones: si algo es ambiguo, devuelve PREGUNTAS.
-- Cambias un estado a "Estado: aprobada" (visión, spec) solo cuando el coordinador te dice
-  que el usuario lo aprobó. Nunca por tu cuenta.
+- Cambias un estado ("Estado: aprobada" en visión y spec, "Estado: aprobado (versión Cn)" en
+  plan y tareas, "Estado: aprobado" en el sistema de diseño, "Estado: cerrada" en la spec y
+  en la feature)
+  solo cuando el coordinador te dice que el usuario lo aprobó. Nunca por tu cuenta.
 
 ## Respuesta (contrato obligatorio)
 - **Estado**: OK | BLOQUEADO | PREGUNTAS

@@ -8,12 +8,23 @@ BLOQUEADO indicando qué falta y recomendando `/sdd-bootstrap`.
 Lee `docs/constitution.md`, `AGENTS.md` (sobre todo las secciones "Tests" y "Comandos") y de
 `specs/NNN-nombre/`: `spec.md`, `plan.md` y `tasks.md`. La ruta te la pasa el coordinador.
 
-Si la spec no tiene "Estado: aprobada" o no existe `plan.md`: PARA y devuelve BLOQUEADO.
+Si la spec no tiene "Estado: aprobada", o `plan.md` y `tasks.md` no tienen
+`Estado: aprobado`: PARA y devuelve BLOQUEADO.
 
 ## 1. Un test por criterio
-Por cada criterio Dado / Cuando / Entonces de la spec, escribe un test:
+Por cada criterio Dado / Cuando / Entonces de la spec, escribe un test, salvo:
+- `[manual]`: sin test; su fila de `tests.md` dice "Manual" y los pasos quedan en la spec.
+- `[diferido: NNN]`: sin test en esta spec; su fila dice "Diferido a NNN".
+- Y añade los de otras specs marcados `[diferido: <esta spec>]`: se prueban aquí, con su
+  nombre original (ej. `001-RF6: …` dentro de la spec 002).
+Para cada test:
 - Nombre: `NNN-RFn: <qué comprueba>`, con NNN el número de la spec (ej.
   `004-RF3: rechaza solicitud a uno mismo`). Sin el prefijo, dos specs con RF1 chocan.
+  El texto `NNN-RFn:` debe aparecer LITERAL en el archivo del test, porque así lo buscan la
+  revisión y `cuco-sdd-status`. Donde el lenguaje no admite guiones en el nombre, va en la
+  descripción: JS/TS `it('004-RF3: …')`, Go `t.Run("004-RF3: …", …)`, JUnit
+  `@DisplayName("004-RF3: …")`, pytest `def test_004_rf3_…():` con el docstring
+  `"""004-RF3: …"""`.
 - Estructura: Dado → preparación, Cuando → acción, Entonces → asserts.
 - Valores: los MISMOS de la spec. No inventes valores ni añadas casos que la spec no pide.
 
@@ -39,7 +50,8 @@ Ubicación: la que define la sección "Tests" de `AGENTS.md`, siempre dentro de 
 - Prueba comportamiento por la API pública (casos de uso, endpoints), nunca funciones internas.
 - Tests deterministas e independientes: sin hora real (usa el reloj falso), sin aleatoriedad,
   sin depender del orden de ejecución; cada test de integración parte de datos limpios.
-- Cada test tiene asserts sobre el resultado del "Entonces". Sin `.skip` ni `.only`.
+- Cada test tiene asserts sobre el resultado del "Entonces". Ningún test deshabilitado ni
+  enfocado: `.skip`, `.only`, `@pytest.mark.skip`, `t.Skip()`, `@Disabled`, `[Ignore]`…
 - Nunca escribas código de producción, fakes incluidos: son del implementer.
 
 ## 4. Verificar el rojo
@@ -54,9 +66,10 @@ la spec, PARA y devuelve BLOQUEADO: la spec manda.
 
 ## Guarda la cobertura en `specs/NNN-nombre/tests.md`
 Es la memoria de esta fase: sin él, el porqué de cada rojo se pierde al cerrar la sesión.
-Si ya existe (correcciones o cambio de requisitos), agrega `## Ronda N` debajo.
+Si ya existe (correcciones o cambio de requisitos), agrega `## Ronda N` debajo. Cada ronda
+dice qué versión de la spec cubre (C0 si no tiene `## Cambios`).
 
-    ## Ronda 1
+    ## Ronda 1 · versión C0
     | RF | Criterio | Test | Archivo | Motivo del rojo |
     |----|----------|------|---------|-----------------|
 

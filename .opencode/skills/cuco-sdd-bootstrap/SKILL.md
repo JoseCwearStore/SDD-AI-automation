@@ -103,7 +103,9 @@ señala sus riesgos.
 ### Etapa 5: Roadmap
 Divide la primera versión en specs pequeñas y entregables en
 `specs/000-vision/roadmap.md`. La 001 es siempre la base técnica (entorno, estructura y
-comandos de calidad funcionando). Cada spec debería tener como máximo ~10 RF.
+comandos de calidad funcionando). Cada spec, como máximo 12 RF (lo ideal, ~10): es el
+límite que aplica `cuco-sdd-spec`. Si una spec depende de otra para verificarse, va después
+en el roadmap: evita que una spec necesite RF `[diferido]`.
 
 ### Etapa 6: Generar los archivos
 Con todas las etapas cerradas, genera (solo los que no existían, ver el inventario):
@@ -232,9 +234,9 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     El flujo SDD usa subagentes: el modelo elegido debe soportarlos. Usar siempre el agente
     `coordinator`, nunca Build, para `/sdd`, `/sdd-continue`, `/sdd-feature` y `/sdd-change`.
     ## Skills
-    El flujo SDD usa SOLO las skills locales `.opencode/skills/cuco-sdd-*/`. Las skills
-    globales `sdd-*` son otro flujo y no se usan. Las de terceros (`.agents/skills/`) solo se
-    usan si se habilitan en el permiso `skill` de un agente.
+    El flujo SDD usa SOLO las skills locales `.opencode/skills/cuco-sdd-*/`. Cualquier otra
+    skill (global, de otro kit o de terceros) no se usa salvo que se habilite en el permiso
+    `skill` de un agente.
     ## Forma de trabajar
     TDD; solo lo que se pide; cambios pequeños; al terminar, resumir y señalar qué revisar.
     ## Memoria
@@ -245,6 +247,9 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - "Errores a evitar" NO cuenta para el límite y nunca se recorta: cada línea costó un
       error real. Si una se vuelve regla permanente, se propone moverla a `AGENTS.md`.
     - Ante la duda, gana no perder información: pasarse de 50 líneas está bien.
+    - El siguiente paso concreto y lo que bloquea va SIEMPRE en "Pendiente para retomar"
+      (es lo que lee `/sdd-continue`), no en "Estado actual". El estado de cada spec no se
+      copia aquí: lo deduce `/sdd-status` de sus archivos.
     ## Límites
     ✅ Siempre · ⚠️ Preguntar antes (dependencias, esquema de datos, módulos nuevos,
     contratos) · 🚫 Nunca.
@@ -254,10 +259,10 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     # MEMORY
 
     ## Estado actual
-    - Bootstrap completado (<fecha>). Siguiente paso: `/sdd` con la spec 001 del roadmap.
+    - Bootstrap completado (<fecha>).
 
     ## Pendiente para retomar
-    - (vacío)
+    - Siguiente paso: `/sdd` con la spec 001 del roadmap.
 
     ## Decisiones (con su porqué)
     - Arquitectura <hexagonal | la elegida>: <porqué>.

@@ -4,5 +4,5 @@ agent: coordinator
 ---
 Retomar la spec indicada por el usuario: $ARGUMENTS
 
-Sigue tu sección "Retomar una spec (/sdd-continue)". Nunca crees una spec nueva desde este
-comando.
+Carga la skill `cuco-sdd-flow-full` y sigue su sección "/sdd-continue", después de tu
+"Verificación previa". Nunca crees una spec nueva desde este comando.

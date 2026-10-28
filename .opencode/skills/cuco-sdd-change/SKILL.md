@@ -22,13 +22,19 @@ Si el cambio es ambiguo: devuelve PREGUNTAS (máximo 5).
 - Cada RF nuevo o modificado lleva sus criterios Dado / Cuando / Entonces con valores
   concretos. Actualiza "Casos límite" y "Fuera de alcance".
 - Cambia el estado a `Estado: borrador`: el cambio necesita una nueva aprobación.
+- Registra el cambio al final de la spec, en `## Cambios` (créala si no existe), con el
+  siguiente número libre: `- **C1** · <fecha> · RF19 modificado, RF33 nuevo · <motivo en una
+  línea>`. Ese número es la **versión vigente** de la spec (sin sección `## Cambios`, la
+  versión es C0). Los informes y aprobaciones posteriores dicen qué versión cubren, y
+  `cuco-sdd-status` ignora los de versiones anteriores.
 
 ## 2. Análisis de impacto (en tu respuesta, no en archivos)
 - **plan.md**: qué secciones habría que cambiar.
 - **tasks.md**: tareas nuevas necesarias. Las ya marcadas NO se desmarcan: los ajustes van
   en tareas nuevas.
 - **Tests de aceptación**: cuáles hay que modificar o crear (por nombre `NNN-RFn:`).
-- **review.md**, **security.md** y **compliance.md**: si existen, quedan invalidados.
+- **review.md**, **security.md** y **compliance.md**: si existen, quedan invalidados (sus
+  rondas son de una versión anterior).
 - **clarify.md**: el cambio necesita una nueva ronda de revisión de spec (se agrega debajo).
 - **Acceso y seguridad**: si el cambio añade acciones, rutas o entradas, actualiza esa
   sección de la spec con sus RF de acceso.

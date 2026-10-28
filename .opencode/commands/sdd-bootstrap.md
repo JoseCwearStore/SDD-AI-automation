@@ -4,4 +4,4 @@ agent: coordinator
 ---
 Prepara este proyecto para el flujo SDD. Idea o contexto del usuario: $ARGUMENTS
 
-Sigue tu sección "Modo bootstrap".
+Carga la skill `cuco-sdd-flow-bootstrap` y síguela.

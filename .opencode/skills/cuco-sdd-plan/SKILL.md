@@ -10,7 +10,14 @@ la pasa el coordinador). NO escribas código.
 
 Si la spec no tiene "Estado: aprobada" o tiene dudas abiertas: PARA y devuelve BLOQUEADO.
 
-Genera `specs/NNN-nombre/plan.md` con estas secciones:
+Genera `specs/NNN-nombre/plan.md`. Su primera línea tras el título es `Estado: borrador`;
+pasa a `Estado: aprobado (versión Cn)` solo cuando el coordinador te dice que el usuario lo
+aprobó (Cn: versión vigente de la spec, ver `cuco-sdd-change`; C0 si no tiene cambios).
+**Modo ACTUALIZAR** (si `plan.md` ya existe, tras un cambio de requisitos): no lo regeneres.
+Modifica solo las secciones que afecta el último cambio de `## Cambios` de la spec, añade en
+"Decisiones" una entrada `Cn: …` con lo que cambió y por qué, y vuelve a `Estado: borrador`
+hasta el nuevo 🔎.
+Secciones:
 
 ## 1. Módulos afectados
 Revisa los módulos existentes en el código y la sección "Arquitectura" de `AGENTS.md`.
@@ -49,6 +56,10 @@ Si no aplica, escribe "No aplica".
 ## 5. ⚠️ Requiere aprobación
 Cambios en el esquema de datos o en las migraciones, dependencias nuevas y módulos nuevos,
 cada uno con su porqué. Si no hay, escribe "Ninguno".
+**Puertas de versión**: por cada dependencia nueva cuya API usa el plan (configuración,
+funciones, formato de archivos), indica la **versión mayor que asume** (ej. "Express 5.x").
+Si el plan se escribió sin poder comprobar la versión estable actual, dilo. La tarea que la
+instala lleva la puerta (ver `cuco-sdd-implement`).
 
 ## 6. Decisiones
 Cada una con: qué se decidió, la alternativa descartada y por qué se descartó.
@@ -69,7 +80,10 @@ lo que se conecta.
 ## 8. Trazabilidad
 | RF | Capa / componente | Tipo de test |
 |----|-------------------|--------------|
-Todos los RF de la spec deben aparecer. Un RF sin fila es un plan incompleto.
+Todos los RF de la spec deben aparecer. Un RF sin fila es un plan incompleto. Los
+`[diferido: NNN]` aparecen con "Diferido a NNN" en lugar de capa; los `[manual]`, con
+"Manual" como tipo de test. Si otras specs tienen RF `[diferido: <esta spec>]`, también van
+aquí: esta spec los implementa y los prueba.
 
 ## 9. Seguridad
 Con `cuco-sdd-security` en modo GUÍA y la sección "Seguridad" de `AGENTS.md`:

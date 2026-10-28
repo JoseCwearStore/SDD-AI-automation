@@ -4,5 +4,5 @@ agent: coordinator
 ---
 Cambio de requisitos solicitado por el usuario: $ARGUMENTS
 
-Haz tu "Verificación previa" y después sigue tu sección "Cambios de requisitos". Si no se
-indica la spec, pregúntale al usuario cuál es antes de delegar.
+Carga la skill `cuco-sdd-flow-full`, haz tu "Verificación previa" y sigue su sección
+"/sdd-change". Si no se indica la spec, pregúntale al usuario cuál es antes de delegar.

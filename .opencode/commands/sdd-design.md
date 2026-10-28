@@ -4,4 +4,4 @@ agent: coordinator
 ---
 Sistema de diseño solicitado por el usuario: $ARGUMENTS
 
-Sigue tu sección "Diseño (/sdd-design)".
+Carga la skill `cuco-sdd-flow-design` y síguela.

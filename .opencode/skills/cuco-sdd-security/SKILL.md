@@ -95,7 +95,8 @@ Lo usa el reviewer, después de la revisión de código. Solo detectas: no corri
 
 1. Lee también: de `specs/NNN-nombre/`, `spec.md` (sección "Acceso y seguridad"), `plan.md`
    (sección "Seguridad") y `security.md` si existe. En modo feature, el mini plan aprobado.
-2. Revisa el diff (`git diff`, `git status`). Para C2, C4 y C6 revisa además todo el
+2. Revisa el diff contra la base, como en `cuco-sdd-review` ("El diff que se revisa":
+   `git diff <base>` y `git status --porcelain -uall`). Para C2, C4 y C6 revisa además todo el
    repositorio de forma ligera (`git ls-files`, búsquedas): un secreto viejo también cuenta.
 3. Si la sección "Comandos" de `AGENTS.md` define "Verificación de seguridad" con un comando
    (no "No aplica…"), ejecútala. Si dice "No aplica hasta la spec NNN", no la ejecutes:
@@ -142,11 +143,13 @@ Comprobaciones mínimas por control (además de leer el código del diff):
   "Opcional".
 
 ### Guarda el veredicto en `specs/NNN-nombre/security.md`
-En modo feature no escribes archivo: el veredicto va en tu respuesta. Si el archivo ya
+En modo feature, en lugar de `security.md` agregas `## Seguridad · Ronda N` al final del
+archivo de la feature (sin tocar lo que hay arriba). Si el archivo ya
 existe, agrega `## Ronda N` debajo de la anterior y verifica primero, uno por uno, los
-hallazgos de la ronda anterior.
+hallazgos de la ronda anterior. Cada ronda dice qué versión de la spec cubre (C0 si no
+tiene `## Cambios`).
 
-    ## Ronda 1
+    ## Ronda 1 · versión C0
     VEREDICTO: SEGURO | CAMBIOS NECESARIOS
 
     | Control | Resultado | Evidencia |

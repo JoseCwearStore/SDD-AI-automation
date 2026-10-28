@@ -4,4 +4,4 @@ agent: coordinator
 ---
 Cambio pequeño solicitado por el usuario: $ARGUMENTS
 
-Haz tu "Verificación previa" y después sigue tu sección "Modo feature".
+Carga la skill `cuco-sdd-flow-feature` y síguela (empieza por tu "Verificación previa").
