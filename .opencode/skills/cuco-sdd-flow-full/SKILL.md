@@ -57,7 +57,7 @@ Si no puedes decidirlo con la petición, pregúntale al usuario lo que falta.
    "Orden de ejecución" de `tasks.md` (no por número). En la primera, @implementer anota la
    `Base:` (el commit contra el que se revisa toda la spec).
    - Antes de cada tarea, muéstrale al usuario sus "Comandos con permiso", sus puertas de
-     versión y los ⚠️: OpenCode se los pedirá.
+     versión y los ⚠️: la herramienta (OpenCode o Claude Code) se los pedirá.
    - Tras cada tarea, informa de los archivos tocados y revisa la salida de comandos de su
      respuesta. Si algo está en rojo (salvo tests de aceptación de tareas aún pendientes),
      PARA y avisa.

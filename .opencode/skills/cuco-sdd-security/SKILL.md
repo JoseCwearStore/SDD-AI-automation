@@ -12,7 +12,7 @@ de `AGENTS.md`: esta skill define QUÉ controlar y CÓMO comprobarlo.
 
 ## Reglas que valen siempre
 - Nunca leas `.env` ni `.env.*` (salvo `.env.example`), ni los busques apuntando a ellos, ni
-  muestres el valor de un secreto. La búsqueda de contenido de OpenCode no se puede bloquear
+  muestres el valor de un secreto. La búsqueda de contenido no siempre se puede bloquear
   por ruta: buscar secretos solo en archivos versionados (`git ls-files`) y en el diff.
   Si encuentras uno, informa solo `archivo:línea` y el tipo (ej. "clave privada").
 - Seguridad por defecto: si no está claro que algo sea público, es privado.

@@ -1,0 +1,21 @@
+{
+  "agent": "coordinator",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Grep|Edit|Write|MultiEdit|NotebookEdit|Bash|PowerShell|WebFetch|WebSearch|Agent|Task|Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/sdd-guard.mjs"
+            ],
+            "timeout": 15,
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}

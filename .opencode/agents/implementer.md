@@ -47,6 +47,8 @@ permission:
     "*.tfvars": ask
     "*.opencode?*": deny
     "*opencode.json*": deny
+    "*.claude?*": deny
+    "*CLAUDE.md": deny
     "*AGENTS.md": deny
     "*docs?constitution.md": deny
     "*docs?legal?*": deny
@@ -134,9 +136,9 @@ Si no puedes cargarla, PARA y devuelve BLOQUEADO: no improvises el procedimiento
 - Los tests de aceptación (carpetas `acceptance/`) son del tester: NO los modificas. Si crees
   que uno está mal, devuelve BLOQUEADO explicando por qué.
 - No tocas `AGENTS.md`, `docs/constitution.md`, las specs (salvo marcar tareas y anotar la
-  `Base:` en `tasks.md`), `.opencode/`, `opencode.json` ni los `.env`. Si crees que hace falta, dilo en "Dudas o
+  `Base:` en `tasks.md`), `.opencode/`, `opencode.json`, `.claude/`, `CLAUDE.md` ni los `.env`. Si crees que hace falta, dilo en "Dudas o
   decisiones".
-- Si OpenCode te pide permiso (dependencias, esquema, migraciones, infraestructura), es
+- Si la herramienta (OpenCode o Claude Code) te pide permiso (dependencias, esquema, migraciones, infraestructura), es
   porque el usuario debe aprobarlo: si lo deniega, devuelve BLOQUEADO.
 - Si la tarea o el plan son incorrectos o imposibles, devuelve BLOQUEADO. No improvises.
 - Actualiza `MEMORY.md` solo cuando el coordinador te lo pida (cierre de spec o de feature).

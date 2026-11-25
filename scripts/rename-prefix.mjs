@@ -3,8 +3,8 @@
 // Uso: node scripts/rename-prefix.mjs <nuevo> [actual]
 //   node scripts/rename-prefix.mjs gym          → cuco-sdd-* pasa a gym-sdd-*
 //   node scripts/rename-prefix.mjs shop gym     → gym-sdd-*  pasa a shop-sdd-*
-// Renombra las carpetas de .opencode/skills y reemplaza el prefijo en todos los archivos
-// de .opencode/ y en AGENTS.md (si existe). Los nombres de skill deben coincidir con su
+// Renombra las carpetas de .opencode/skills y .claude/skills (las que existan) y reemplaza el
+// prefijo en los archivos del kit de .opencode/ y .claude/ y en AGENTS.md (si existe). Los nombres de skill deben coincidir con su
 // carpeta, y los permisos `skill` de los agentes los listan por nombre: por eso se cambia
 // todo de una vez.
 import { existsSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
@@ -24,26 +24,33 @@ if (next === current) {
 
 const from = `${current}-sdd-`;
 const to = `${next}-sdd-`;
-const skillsDir = join(".opencode", "skills");
-
-if (!existsSync(skillsDir)) {
-  console.error("No encuentro .opencode/skills: ejecuta el script desde la raíz del proyecto.");
+const roots = [".opencode", ".claude"].filter((root) => existsSync(join(root, "skills")));
+if (roots.length === 0) {
+  console.error("No encuentro .opencode/skills ni .claude/skills: ejecuta el script desde la raíz del proyecto.");
   process.exit(1);
 }
 
-const folders = readdirSync(skillsDir).filter((name) => name.startsWith(from));
+const plan = roots.map((root) => {
+  const skillsDir = join(root, "skills");
+  return { skillsDir, folders: readdirSync(skillsDir).filter((name) => name.startsWith(from)) };
+});
+const folders = plan.flatMap((p) => p.folders);
 if (folders.length === 0) {
-  console.error(`No hay skills con el prefijo "${from}" en ${skillsDir}.`);
+  console.error(`No hay skills con el prefijo "${from}" en ${roots.map((r) => join(r, "skills")).join(" ni en ")}.`);
   process.exit(1);
 }
 
-const clash = folders.map((name) => name.replace(from, to)).find((name) => existsSync(join(skillsDir, name)));
-if (clash) {
-  console.error(`Ya existe ${join(skillsDir, clash)}: no se renombra nada.`);
-  process.exit(1);
+for (const { skillsDir, folders: names } of plan) {
+  const clash = names.map((name) => name.replace(from, to)).find((name) => existsSync(join(skillsDir, name)));
+  if (clash) {
+    console.error(`Ya existe ${join(skillsDir, clash)}: no se renombra nada.`);
+    process.exit(1);
+  }
 }
 
-for (const name of folders) renameSync(join(skillsDir, name), join(skillsDir, name.replace(from, to)));
+for (const { skillsDir, folders: names } of plan) {
+  for (const name of names) renameSync(join(skillsDir, name), join(skillsDir, name.replace(from, to)));
+}
 
 const walk = (dir) =>
   readdirSync(dir).flatMap((name) => {
@@ -52,7 +59,10 @@ const walk = (dir) =>
     return statSync(path).isDirectory() ? walk(path) : [path];
   });
 
-const files = [...walk(".opencode"), ...(existsSync("AGENTS.md") ? ["AGENTS.md"] : [])].filter((f) => f.endsWith(".md"));
+const files = [
+  ...roots.flatMap(walk).filter((f) => f.endsWith(".md")),
+  ...[join(".claude", "sdd-permissions.json"), "AGENTS.md"].filter((f) => existsSync(f)),
+];
 let changed = 0;
 for (const file of files) {
   const text = readFileSync(file, "utf8");
@@ -62,4 +72,4 @@ for (const file of files) {
 }
 
 console.log(`${folders.length} skills renombradas y ${changed} archivos actualizados: ${from}* → ${to}*`);
-console.log("Reinicia OpenCode para que cargue los nuevos nombres.");
+console.log(`Reinicia ${roots.map((r) => (r === ".claude" ? "Claude Code" : "OpenCode")).join(" y ")} para que cargue los nuevos nombres.`);

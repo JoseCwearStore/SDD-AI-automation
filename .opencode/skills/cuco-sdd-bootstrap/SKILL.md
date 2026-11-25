@@ -15,7 +15,7 @@ Comprueba cuáles existen: `AGENTS.md`, `MEMORY.md`, `docs/constitution.md` y
 Indica el inventario en tu respuesta.
 
 ## 1. Detecta el modo
-- **GREENFIELD**: no hay código fuera de `.opencode/` (ni manifiestos como `package.json`,
+- **GREENFIELD**: no hay código fuera de `.opencode/` y `.claude/` (ni manifiestos como `package.json`,
   `pyproject.toml`, `go.mod`, ni carpetas de código). `AGENTS.md`, `MEMORY.md`, `docs/` y
   `specs/` no cuentan como código.
 - **BROWNFIELD**: hay código existente.
@@ -232,9 +232,9 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     Idioma y registro de la interfaz, idioma del código, commits convencionales.
     ## Requisitos del modelo
     El flujo SDD usa subagentes: el modelo elegido debe soportarlos. Usar siempre el agente
-    `coordinator`, nunca Build, para `/sdd`, `/sdd-continue`, `/sdd-feature` y `/sdd-change`.
+    `coordinator` (en OpenCode, nunca Build; en Claude Code lo fija `.claude/settings.json`) para `/sdd`, `/sdd-continue`, `/sdd-feature` y `/sdd-change`.
     ## Skills
-    El flujo SDD usa SOLO las skills locales `.opencode/skills/cuco-sdd-*/`. Cualquier otra
+    El flujo SDD usa SOLO las skills locales `cuco-sdd-*` del kit (`.opencode/skills/` en OpenCode, `.claude/skills/` en Claude Code). Cualquier otra
     skill (global, de otro kit o de terceros) no se usa salvo que se habilite en el permiso
     `skill` de un agente.
     ## Forma de trabajar
@@ -272,7 +272,7 @@ No generes visión ni roadmap salvo que el usuario lo pida.
     - (vacío)
 
 ## Reglas
-- Nunca escribas el frontmatter de los agentes ni nada dentro de `.opencode/`.
+- Nunca escribas el frontmatter de los agentes ni nada dentro de `.opencode/` ni de `.claude/`.
 - Nunca sobrescribas un archivo que ya existía sin la aprobación del usuario (ver el
   inventario).
 - Nunca decidas por el usuario: propones opciones y recomiendas una.

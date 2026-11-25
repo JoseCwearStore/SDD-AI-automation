@@ -20,7 +20,7 @@ coordinador. Si el proyecto no tiene interfaz de usuario, dilo y termina: no hac
   licencia. Nada sin licencia clara.
 - **Un link de Figma solo no se puede leer** (requiere sesión y no tienes acceso web). Si el
   usuario solo da un link, pídele exportaciones (camino A) o que configure el servidor MCP de
-  Figma en OpenCode (camino B; ver el README del kit).
+  Figma en su herramienta, OpenCode o Claude Code (camino B; ver el README del kit).
 - Para analizar imágenes hace falta un modelo con visión. Si no puedes ver una imagen de
   `references/`, dilo: no inventes lo que contiene.
 

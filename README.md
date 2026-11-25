@@ -1,4 +1,4 @@
-# SDD AI Automation — kit de Spec-Driven Development para OpenCode
+# SDD AI Automation — kit de Spec-Driven Development para OpenCode y Claude Code
 
 Un equipo de agentes de IA que lleva un proyecto **desde la idea hasta el código revisado**,
 con especificaciones primero, TDD y aprobación humana en cada paso.
@@ -28,9 +28,12 @@ con especificaciones primero, TDD y aprobación humana en cada paso.
 
 ## Requisitos
 
-- [OpenCode](https://opencode.ai) (probado contra el schema de la versión 1.18).
-- Un modelo que soporte **subagentes**. Los modelos gratuitos de OpenCode fallan al invocarlos:
-  usa un proveedor propio con API key.
+- [OpenCode](https://opencode.ai) (probado contra el schema de la versión 1.18) **o**
+  [Claude Code](https://code.claude.com) v2.1.295 o posterior (ver [Claude Code](#claude-code)).
+  Puedes usar los dos en el mismo proyecto.
+- Un modelo que soporte **subagentes**. En OpenCode, los modelos gratuitos fallan al invocarlos:
+  usa un proveedor propio con API key. En Claude Code usas tu cuenta de Claude (plan Pro, Max,
+  Team o Enterprise), sin API key.
 - `git` en el proyecto (el reviewer revisa el diff).
 - Node.js, para los scripts de instalación y de renombrado.
 
@@ -44,6 +47,8 @@ cambia por sistema es cómo instalar los requisitos.
 Recomendamos **fnm** para Node.js: cada proyecto puede exigir su propia versión (en su
 `.nvmrc`) y fnm cambia de versión solo al entrar en la carpeta, sin afectar a tus otros
 proyectos.
+
+Instala **OpenCode, Claude Code o los dos**: en cada sistema verás las dos opciones.
 
 **Windows** (PowerShell):
 
@@ -64,6 +69,21 @@ fnm install --lts
 npm install -g opencode-ai
 ```
 
+Para **Claude Code**, el instalador oficial (se actualiza solo y no depende de Node):
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+Abre una terminal nueva para que reconozca `claude`. También puedes instalarlo con
+`winget install Anthropic.ClaudeCode` o con npm (`npm install -g @anthropic-ai/claude-code`).
+
+> **npm + fnm:** con fnm, cada versión de Node tiene sus propios programas globales. Si
+> instalas `opencode-ai` o Claude Code con npm, hazlo **dentro de la carpeta del proyecto**
+> (con la versión de Node de su `.nvmrc`); si no, el comando puede no aparecer ahí. Compruébalo
+> desde el proyecto con `node --version` y `claude --version` (u `opencode --version`). Con
+> npm, Claude Code no se actualiza solo: `npm install -g @anthropic-ai/claude-code@latest`.
+
 > OpenCode recomienda **WSL** en Windows para la mejor compatibilidad. El kit también
 > funciona en Windows nativo (así se probó). En PowerShell 5, `&&` no existe: escribe un
 > comando por línea.
@@ -74,7 +94,10 @@ npm install -g opencode-ai
 xcode-select --install
 brew install fnm
 brew install anomalyco/tap/opencode
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+
+(Instala solo la herramienta que vayas a usar: la última línea es Claude Code.)
 
 Agrega a `~/.zshrc` la línea `eval "$(fnm env --use-on-cd --shell zsh)"`, abre una terminal
 nueva e instala Node:
@@ -89,7 +112,10 @@ fnm install --lts
 sudo apt install git curl unzip
 curl -fsSL https://fnm.vercel.app/install | bash
 curl -fsSL https://opencode.ai/install | bash
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+
+(Las dos últimas líneas son OpenCode y Claude Code: instala solo la que vayas a usar.)
 
 Agrega a `~/.bashrc` la línea `eval "$(fnm env --use-on-cd --shell bash)"`, abre una terminal
 nueva e instala Node:
@@ -98,8 +124,10 @@ nueva e instala Node:
 fnm install --lts
 ```
 
-Comprueba que todo está: `git --version`, `node --version` y `opencode --version`. Otras
-formas de instalar OpenCode (Scoop, Chocolatey, Arch…): [opencode.ai/docs](https://opencode.ai/docs/).
+Comprueba que todo está: `git --version`, `node --version` y `opencode --version` o
+`claude --version` (v2.1.295 o posterior). Otras formas de instalar OpenCode (Scoop,
+Chocolatey, Arch…): [opencode.ai/docs](https://opencode.ai/docs/); de Claude Code:
+[code.claude.com/docs](https://code.claude.com/docs/en/setup).
 
 ### 2. Descarga el kit
 
@@ -136,7 +164,11 @@ Si tu proyecto está en otro sitio, pasa su ruta completa en lugar de `../mi-pro
 - `--prefix gym` deja las skills como `gym-sdd-*` ([por qué](#personalizar-el-prefijo-de-las-skills)).
   Si no lo indicas, se usa el del kit (`cuco`).
 - `--dry-run` muestra qué haría sin escribir nada.
-- Copia `.opencode/agents`, `.opencode/commands` y `.opencode/skills`, y crea o completa
+- `--target` elige la herramienta: `auto` (por defecto), `opencode`, `claude` o `both`. En
+  `auto` detecta lo que ya usa tu proyecto (`.opencode/` u `opencode.json` → OpenCode;
+  `.claude/` o `CLAUDE.md` → Claude Code); si no hay nada, lo que tengas instalado
+  (`opencode`, `claude`); y si tampoco, instala para las dos. El informe dice qué detectó.
+- Para OpenCode, copia `.opencode/agents`, `.opencode/commands` y `.opencode/skills`, y crea o completa
   `opencode.json` con `"default_agent": "coordinator"`.
 - **Nunca toca** `AGENTS.md`, `MEMORY.md`, `docs/` ni `specs/`: son de tu proyecto.
 - Anota lo que instaló en `.opencode/sdd-kit.json`. Al actualizar, borra solo los archivos
@@ -146,6 +178,8 @@ Si tu proyecto está en otro sitio, pasa su ruta completa en lugar de `../mi-pro
   añadas `"default_agent": "coordinator"` a mano.
 
 ### 5. Arranca
+
+**Con OpenCode:**
 
 1. Si es la primera vez que usas OpenCode, conecta tu proveedor con su API key
    (`opencode auth login`) y, ya dentro de OpenCode, elige el modelo con `/models`. Recuerda:
@@ -162,10 +196,28 @@ Si tu proyecto está en otro sitio, pasa su ruta completa en lugar de `../mi-pro
 /sdd-bootstrap Una app para … (describe lo que quieres construir)
 ```
 
+**Con Claude Code:**
+
+1. Abre una terminal en la carpeta de tu proyecto y ejecuta `claude`. La primera vez te pide
+   iniciar sesión con tu cuenta de Claude en el navegador.
+2. Cuando pregunte si confías en la carpeta, responde que sí: sin eso no corren los hooks del
+   proyecto (el guardián de permisos). Si ya estaba abierto, reinícialo tras instalar o
+   actualizar el kit.
+3. Comprueba que el agente principal es `coordinator` (lo indica al arrancar) y escribe
+   `/sdd-status`: debe cargar la skill `<prefijo>-sdd-status` y responder. Las versiones
+   recientes de Claude Code ya no tienen el comando `/agents`.
+4. Haz la prueba de permisos del paso 6.
+5. Empieza con tu idea: `/sdd-bootstrap Una app para …`.
+
 ### 6. Prueba los permisos
 
 Un permiso que no probaste no está verificado. Crea un `.env` de prueba con
-`SECRETO=prueba` y pide a cada agente, escribiendo `@agente` y la instrucción:
+`SECRETO=prueba` y pide a cada agente la instrucción de la tabla:
+
+- **OpenCode:** escribe `@agente` y la instrucción.
+- **Claude Code:** abre una sesión como ese agente con `claude --agent planner` (o `tester`,
+  `implementer`, `reviewer`), da la instrucción y sal con `/exit` antes de pasar al siguiente.
+  Cuando el guardián rechaza o pregunta, el mensaje empieza con `Kit SDD (<agente>)`.
 
 | Agente | Instrucción | Resultado esperado |
 |--------|-------------|--------------------|
@@ -174,17 +226,55 @@ Un permiso que no probaste no está verificado. Crea un `.env` de prueba con
 | `@tester` | crea `tests/acceptance/prueba.txt` con el texto hola | Lo crea |
 | `@tester` | añade una línea al final de `AGENTS.md` | Lo rechaza |
 | `@implementer` | crea `src/prueba.txt` con el texto hola | Lo crea |
-| `@implementer` | añade una línea a `opencode.json` | Lo rechaza |
+| `@implementer` | añade una línea a `opencode.json` (en Claude Code: a `.claude/settings.json`) | Lo rechaza |
 | `@implementer` | edita `specs/999-prueba/nota.md` | Lo rechaza |
 | `@implementer` | ejecuta `git status` | Lo ejecuta sin preguntar |
 | `@implementer` | ejecuta `git commit -m prueba` | Lo rechaza |
-| `@implementer` | ejecuta `git status > prueba-redir.txt` | **Te pregunta** (si lo ejecuta sin preguntar, avisa: ver "Problemas conocidos") |
+| `@implementer` | ejecuta `git status > prueba-redir.txt` | **Te pregunta** (si en OpenCode lo ejecuta sin preguntar, ver "Problemas conocidos") |
 | `@reviewer` | crea `specs/999-prueba/review.md` con el texto hola | Lo crea |
 | `@reviewer` | crea `src/prueba.txt` con el texto hola | Lo rechaza |
 | `@reviewer` | lee el archivo `.env` | Lo rechaza |
 
+En Claude Code puedes probar además `@coordinator` → "edita `AGENTS.md`" (lo rechaza): basta
+con escribirlo en la sesión normal, porque ahí el agente principal ya es el coordinador.
+
 Al terminar, borra a mano `.env`, `specs/999-prueba/`, `src/prueba.txt`,
 `tests/acceptance/prueba.txt` y `prueba-redir.txt` si se creó.
+
+## Claude Code
+
+El kit tiene **una sola fuente** (`.opencode/` del repo) y el instalador la convierte para
+Claude Code. Los agentes, las skills y las reglas de transparencia y 🔎 son los mismos.
+
+| OpenCode | Claude Code (lo genera el instalador) |
+|----------|---------------------------------------|
+| `.opencode/agents/*.md` | `.claude/agents/*.md` (mismo cuerpo; `disallowedTools` para lo denegado del todo) |
+| Permisos por agente (`permission:`) | `.claude/sdd-permissions.json` + hook `.claude/hooks/sdd-guard.mjs` |
+| `.opencode/commands/*.md` | `.claude/commands/*.md` (`/sdd`, `/sdd-continue`…) |
+| `.opencode/skills/` | `.claude/skills/` (idénticas) |
+| `"default_agent": "coordinator"` en `opencode.json` | `"agent": "coordinator"` en `.claude/settings.json` |
+| `AGENTS.md` se lee solo | `CLAUDE.md` con `@AGENTS.md` (se crea si no existe) |
+
+**Permisos.** Claude Code no tiene permisos de rutas por agente, así que el hook
+`sdd-guard.mjs` (PreToolUse) los aplica con las mismas reglas de OpenCode: identifica al
+agente por `agent_type`, gana la última regla que coincide y responde `allow`, `ask` o
+`deny`. Cubre lectura (`Read`, `Grep`), edición (`Edit`, `Write`…), terminal (`Bash`,
+`PowerShell`, por subcomando), web, subagentes (`Agent`) y skills (`Skill`). Además pide
+aprobación si un comando de terminal nombra un archivo de secretos. Fuera de los agentes del
+kit, o fuera del proyecto, no decide nada. Si falla, bloquea (`onFailure: "block"`).
+
+**Arranque.** Ver el paso 5 de la instalación ("Con Claude Code"). Si le preguntas al
+coordinador qué subagentes puede llamar, debe nombrar planner, tester, implementer y reviewer.
+
+**Terminal.** El guardián pide tu aprobación si un comando escribe archivos (`>`, `>>`,
+`tee`, `Out-File`, `Set-Content`): los archivos se editan con la herramienta de edición, que
+es la que respeta los permisos por ruta.
+
+**Fuera del flujo SDD.** Como en OpenCode con Build, para trabajar sin el coordinador abre
+`claude --agent <otro>` o pon otro `"agent"` en `.claude/settings.local.json` (no se versiona).
+
+**Ajustes por proyecto.** `sdd.local.json` vale para las dos herramientas: déjalo en
+`.opencode/` o en `.claude/` (solo uno).
 
 ### Actualizar el kit en un proyecto
 
@@ -192,7 +282,7 @@ Haz `git pull` en el kit y vuelve a ejecutar el mismo comando, sin `--prefix`: d
 prefijo que ya usa tu proyecto y solo reescribe los archivos que cambiaron. Con el kit
 como única fuente de verdad, todos tus proyectos se actualizan igual.
 
-### Ajustes por proyecto (`.opencode/sdd.local.json`)
+### Ajustes por proyecto (`sdd.local.json`)
 
 No edites los agentes en tu proyecto: la siguiente actualización los pisa. Si tu stack
 necesita permisos propios (ej. permitir `uv run ruff` o `make test`), créalos en
@@ -495,9 +585,14 @@ con su rol real, para que todas las fases los entiendan. Renombrar una carpeta e
                  accesibilidad y diseño; y 5 cuco-sdd-flow-* con los pasos de cada comando
                  para el coordinador)
 opencode.json    default_agent: coordinator
+claude/
+├── hooks/sdd-guard.mjs   guardián de permisos por agente para Claude Code
+├── CLAUDE.md             plantilla (importa AGENTS.md)
+└── settings.example.json lo que el instalador añade a .claude/settings.json
 scripts/
-├── install.mjs        instala o actualiza el kit en un proyecto (con sdd.local.json)
-└── rename-prefix.mjs  cambia el prefijo de las skills
+├── install.mjs        instala o actualiza el kit (OpenCode, Claude Code o ambos; con sdd.local.json)
+├── rename-prefix.mjs  cambia el prefijo de las skills (en .opencode y .claude)
+└── lib/               frontmatter.mjs (lector) y claude.mjs (conversión a Claude Code)
 ```
 
 ## Problemas conocidos de OpenCode (aprendidos a la mala)
